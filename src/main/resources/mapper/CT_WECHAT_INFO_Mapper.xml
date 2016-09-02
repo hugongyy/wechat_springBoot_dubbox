@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CT_WECHAT_INFO">
+	<!-- 微信管理端的查询 start -->
+	<select id="queryGroupByPorjectManage" parameterType="java.lang.String" resultType="com.chetong.ctwechat.entity.mapping.CtGroup">
+		SELECT
+			g.id AS id,
+			g.user_id AS userId,
+			g.org_name AS orgName,
+			g.prov_code AS provCode,
+			g.city_code AS cityCode,
+			g.area_code AS areaCode,
+			g.prov_desc AS provDesc,
+			g.city_desc AS cityDesc,
+			g.area_desc AS areaDesc,
+			g.address AS address,
+			g.is_manage_org AS isManageOrg
+		FROM
+			ct_group g
+		LEFT JOIN ct_person_group pg ON pg.group_id = g.id
+		AND pg.ext1 = 5
+		LEFT JOIN ct_user u ON u.id = pg.user_id
+		WHERE u.id = #{userId}
+		<!-- 715 -->
+	</select>
+	
+	
+	<select id="queryUserAllInfoByUserId" parameterType="java.lang.String" resultType="com.chetong.ctwechat.entity.mapping.CtUser">
+		select 
+		u.id as id,
+		u.pid as pid,
+		u.user_type as userType,
+		CONCAT(u.lastname,u.firstname) as lastname,
+		case when u.pid is null then g.org_name else g2.org_name end as orgName,
+		case when u.pid is null then g.prov_code else g2.prov_code end as mailProvCode,
+		case when u.pid is null then g.city_code else g2.city_code end as mailCityCode,
+		case when u.pid is null then g.is_manage_org else g2.is_manage_org end as isFanhua,
+		u.login_name as loginName,
+		u.is_mgr as isMgr,
+		u.weichatid as weichatid,
+		GROUP_CONCAT(DISTINCT a.prov_code) as mailAddress,
+		GROUP_CONCAT(DISTINCT a2.report_no) as bankNo
+		from ct_user u 
+		left join ct_group g on g.user_id = u.id
+		left join ct_group g2 on g2.user_id = u.pid
+		left join ct_user_auth_area a on a.auth_id = 10 and a.rule_type = 1 and a.user_id = u.id
+		left join ct_user_auth_area a2 on a2.auth_id = 10 and a2.rule_type = 2 and a2.user_id = u.id
+		<where>
+			u.id = #{userId}
+		</where>
+	</select>
+	
+	<select id="querySubUserIdByCompanyUserId" parameterType="java.lang.String" resultType="java.lang.String">
+		select GROUP_CONCAT(ul.user_id) as subUserIds from ct_user_level ul where ul.up_user_id = #{userId}
+	</select>
+	
+	<select id="querySubUserIdByOrgUserId" parameterType="java.lang.String" resultType="java.lang.String">
+		select GROUP_CONCAT(u.id) as subUserIds from ct_user u where u.pid = #{userId}
+	</select>
+	
+	<select id="querySubUserIdByGroupUserId" parameterType="java.lang.String" resultType="java.lang.String">
+		select GROUP_CONCAT(pg.user_id) as subUserIds from ct_person_group pg, ct_group g where g.id = pg.group_id and pg.stat = '1' and pg.service_id = '1' and pg.ext1 = '2' and g.user_id = #{userId}
+	</select>
+
+	<!-- 车险 -->
+	<sql id="queryCountMap">
+	    SELECT o1.state as state ,count(1) as sumCount FROM (SELECT	o.*,(CASE
+		WHEN(o.deal_stat = '04' AND o.order_type = 0 AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11)THEN	'20'
+		WHEN(o.deal_stat = '04' AND o.order_type in (1,2,3) AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)THEN	'20'
+		ELSE	o.deal_stat 
+		END )state 
+		FROM	fm_order o	    
+	</sql>
+	
+	<sql id="queryCountWhereOtherLike">
+    	AND o.service_id = 1
+    	AND o.import_type = '0'
+		AND o.is_simple = '0'
+    	<if test="otherLike!=null">
+		 	AND ( o.car_no like CONCAT('%',#{otherLike},'%')
+			OR o.case_no like CONCAT('%',#{otherLike},'%')
+			OR o.work_address like CONCAT('%',#{otherLike},'%')
+			OR o.seller_user_name like CONCAT('%',#{otherLike},'%')
+			OR o.order_no like CONCAT('%',#{otherLike},'%') )
+		</if>
+	</sql>
+	
+	<sql id="queryOrderListWhereRules">
+	    <if test="auditAreas != null">
+		    AND o.ext1 in 
+		    <foreach collection="auditAreas" item="aArea" open="(" separator="," close=")">
+			    #{aArea}
+			</foreach>
+		</if>
+		<if test="likeCaseNos != null">
+		    AND 
+		    <foreach collection="likeCaseNos" item="caseNo" open="(" separator="OR" close=")">
+			    o.case_no like CONCAT('%',#{caseNo},'%')
+			</foreach>				   
+		</if>	    
+	</sql>
+	
+
+	
+	<select id="countOrder4Company" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+	    <include refid="queryCountMap"/>
+	    	<where>
+				AND (o.buyer_user_id IN 
+					<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+					    #{uId}
+					</foreach>
+				or o.send_id in 
+					<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+					    #{uId}
+					</foreach>
+					 )
+				<include refid="queryCountWhereOtherLike"/>
+				<include refid="queryOrderListWhereRules"/>
+			</where>
+				) o1
+			GROUP BY state	    
+	</select>
+	
+	<select id="countOrder4Org" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+	    <include refid="queryCountMap"/>
+	    	<where>
+				AND (o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+					OR o.send_id = #{userId})
+				<include refid="queryCountWhereOtherLike"/>
+				<include refid="queryOrderListWhereRules"/>
+				<choose>		
+				<when test="provCode != null">
+					AND o.ext1 = #{provCode}
+					AND o.ext2 NOT IN 
+					<foreach collection="spAreas" item="cCode" open="(" separator="," close=")">
+					    #{cCode}
+					</foreach>
+				</when>
+				<when test="cityCode != null">
+				    AND o.ext2 = #{cityCode}
+				</when>
+				</choose>				
+			</where>
+				) o1
+			GROUP BY state	    
+	</select>	
+	
+	<select id="countOrder4Seller" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+	    <include refid="queryCountMap"/>
+	    	<where>
+				AND o.seller_user_id IN
+					<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+					    #{uId}
+					</foreach>
+				<include refid="queryCountWhereOtherLike"/>
+			</where>
+				) o1
+			GROUP BY state	    
+	</select>
+	
+	<!-- 货运险 -->
+	<sql id="queryHyCountWhereOtherLike">	    	
+    	<if test="otherLike!=null">
+		 	AND ( o.seller_user_name like CONCAT('%',#{otherLike},'%')
+			OR o.case_no like CONCAT('%',#{otherLike},'%')
+			OR o.order_no like CONCAT('%',#{otherLike},'%')
+			OR o.send_address like CONCAT('%',#{otherLike},'%') )			
+		</if>
+	</sql>
+	
+	<select id="countHyOrder4Company" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+		select o.deal_stat as state, count(1) as sumCount
+			FROM hy_order o
+			<where>	
+				(o.buyer_user_id IN 
+				<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+				    #{uId}
+				</foreach>
+				or o.send_user_id IN 
+				<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+				    #{uId}
+				</foreach>
+				 )
+				<include refid="queryHyCountWhereOtherLike"/>
+			</where>
+		GROUP BY o.deal_stat
+	</select>
+	
+	<select id="countHyOrder4Org" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+		select o.deal_stat as state, count(1) as sumCount
+			FROM hy_order o
+			<where>	
+				AND (o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+					OR o.send_user_id = #{userId})
+				<include refid="queryHyCountWhereOtherLike"/>
+				<choose>		
+				<when test="provCode != null">
+					AND o.prov_code = #{provCode}
+					AND o.city_code NOT IN 
+					<foreach collection="spAreas" item="cCode" open="(" separator="," close=")">
+					    #{cCode}
+					</foreach>
+				</when>
+				<when test="cityCode != null">
+				    AND o.city_code = #{cityCode}
+				</when>
+				</choose>
+			</where>
+		GROUP BY o.deal_stat
+	</select>
+	
+	<select id="countHyOrder4Seller" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.OrderListModel">
+	    select o.deal_stat as state, count(1) as sumCount
+			FROM hy_order o
+			<where>
+			    AND o.seller_user_id IN
+			    	<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+					    #{uId}
+					</foreach>
+			</where>
+	</select>
+	
+	<sql id="queryOrderListMap">
+		SELECT
+			o.id AS id,
+			o.order_no AS orderNo,
+			o.subject_id AS subjectId,
+			o.subject_name AS subjectName,
+			o.service_id AS serviceId,
+			o.case_no AS caseNo,
+			o.order_type AS orderType,
+			o.deal_stat AS dealStat,
+			o.send_time AS sendTime,
+			o.buyer_user_id AS buyerUserId,
+			o.buyer_user_name AS buyerUserName,
+			o.seller_user_id AS sellerUserId,
+			o.seller_user_name AS sellerUserName,
+			o.alow_money AS alowMoney,
+			o.car_no AS carNo,
+			o.link_man AS linkMan,
+			o.link_tel AS linkTel,	
+			o.is_simple AS isSimple,
+			o.work_address AS workAddress,
+			u.mobile AS sellerUserType
+		FROM fm_order o
+		LEFT JOIN ct_user u on o.seller_user_id = u.id 
+	</sql>
+	
+	<select id="queryOrderList4Company" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
+		<include refid="queryOrderListMap"/>
+		<where>
+			AND o.import_type = '0'
+			AND o.service_id = 1
+			<choose>
+			    <when test='dealStat == "20"'>
+			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    </when>
+			    <otherwise>
+					AND o.deal_stat = #{dealStat}        
+			    </otherwise>
+			</choose>
+			<choose>
+			    <when test="workType == 0">	<!-- 本地 -->
+			        AND o.is_remote = '0'
+			    </when>
+			    <when test="workType == 1">	<!-- 异地作业地 -->
+			        AND o.is_remote = '1'        
+			    </when>
+			    <when test="workType == 2">	<!-- 异地委托地 -->
+			        AND o.is_remote = '1'        
+			    </when>
+			    <otherwise>
+			        AND o.is_remote = '9'
+			    </otherwise>
+			</choose>
+			AND (o.buyer_user_id IN 
+			<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+			    #{uId}
+			</foreach>
+			OR o.send_id IN 
+			<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+			    #{uId}
+			</foreach>
+			)
+			<include refid="queryCountWhereOtherLike"/>
+			<include refid="queryOrderListWhereRules"/>
+		</where>
+		
+		<if test="startRecord != null">
+		    ORDER BY o.send_time DESC
+			LIMIT #{startRecord}, #{pageSize}
+		</if>
+	</select>
+	
+	<select id="queryOrderList4Org" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
+		<include refid="queryOrderListMap"/>
+		<where>
+			AND o.import_type = '0'
+			AND o.service_id = 1
+			<choose>
+			    <when test='dealStat == "20"'>
+			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    </when>
+			    <otherwise>
+					AND o.deal_stat = #{dealStat}        
+			    </otherwise>
+			</choose>
+			<choose>
+			    <when test="workType == 0">	<!-- 本地 -->
+			        AND o.is_remote = '0'
+			        AND ( o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+			        	OR o.send_id = #{userId} )
+			    </when>
+			    <when test="workType == 1">	<!-- 异地作业地 -->
+			        AND o.is_remote = '1'
+			        <if test="provCode != null">
+			            AND o.ext1 = #{provCode} 
+			            AND o.ext2 NOT IN 
+			            <foreach collection="spAreas" item="cCode" open="(" separator="," close=")">
+						    #{cCode}
+						</foreach>
+			        </if>
+			        <if test="cityCode != null">
+			            AND o.ext2 = #{cityCode}
+			        </if>
+			    </when>
+			    <when test="workType == 2">	<!-- 异地委托地 -->
+			        AND o.is_remote = '1'
+			        AND (o.buyer_user_id IN (SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1
+			        AND t.grant_type = '1' AND (t.apply_id_a = #{userId} ) )
+			         OR o.send_id = #{userId} )
+			    </when>
+			    <otherwise>
+			        AND o.is_remote = '9'
+			    </otherwise>
+			</choose>
+			<include refid="queryCountWhereOtherLike"/>
+			<include refid="queryOrderListWhereRules"/>
+		</where>
+		<if test="startRecord != null">
+		    ORDER BY o.send_time DESC
+			LIMIT #{startRecord}, #{pageSize}
+		</if>
+	</select>
+	
+	<select id="queryOrderList4Seller" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
+		<include refid="queryOrderListMap"/>
+		<where>
+			AND o.import_type = '0'
+			AND o.service_id = 1
+			<choose>
+			    <when test='dealStat == "20"'>
+			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    </when>
+			    <otherwise>
+					AND o.deal_stat = #{dealStat}        
+			    </otherwise>
+			</choose>
+			<choose>
+			    <when test="workType == 0">	<!-- 本地 -->
+			        AND o.is_remote = '0'
+			    </when>
+			    <when test="workType == 1">	<!-- 异地作业地 -->
+			        AND o.is_remote = '1'        
+			    </when>
+			    <when test="workType == 2">	<!-- 异地委托地 -->
+			        AND o.is_remote = '1'        
+			    </when>
+			    <otherwise>
+			        AND o.is_remote = '9'
+			    </otherwise>
+			</choose>
+			AND o.seller_user_id IN 
+			<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+			    #{uId}
+			</foreach>
+			<include refid="queryCountWhereOtherLike"/>
+		</where>
+		<if test="startRecord != null">
+		    ORDER BY o.send_time DESC
+			LIMIT #{startRecord}, #{pageSize}
+		</if>
+	</select>
+		<!-- 货运险 -->
+	<sql id="queryHyOrderListMap">
+		SELECT
+			o.id AS id,
+			o.order_no AS orderNo,
+			o.deal_stat AS dealStat,
+			o.buyer_user_name AS buyerUserName,
+			t.case_linkman AS caseLinkman,
+			t.case_linktel AS caseLinktel,
+			o.seller_user_id AS sellerUserId,
+			o.seller_user_name AS sellerUserName,
+			o.seller_tel AS sellerTel,
+			t.transport_type AS transportType,
+			o.send_time AS sendTime,
+			o.send_address AS sendAddress,
+			t.cargo_name AS cargoName
+		FROM
+			hy_order o
+		LEFT JOIN hy_order_task t ON o.task_id = t.id
+	</sql>
+	
+	<select id="queryHyOrderList4Company" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="queryHyOrderListMap"/>
+		<where>
+		AND o.service_id = 5
+		AND o.deal_stat = #{dealStat}
+		AND (o.buyer_user_id IN 
+		<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+		    #{uId}
+		</foreach>
+		 OR o.send_user_id IN 
+		<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+		    #{uId}
+		</foreach> 
+		)
+		<include refid="queryHyCountWhereOtherLike"/>
+		</where>
+		ORDER BY o.send_time DESC
+		LIMIT #{startRecord}, #{pageSize}
+	</select>
+	
+	<select id="queryHyOrderList4Org" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="queryHyOrderListMap"/>
+		<where>
+		AND o.service_id = 5
+		AND o.deal_stat = #{dealStat}
+		AND ( o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+			OR o.send_user_id = #{userId} )
+		<include refid="queryHyCountWhereOtherLike"/>
+		</where>
+		ORDER BY o.send_time DESC
+		LIMIT #{startRecord}, #{pageSize}
+	</select>
+	
+	<select id="queryHyOrderList4Seller" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="queryHyOrderListMap"/>
+		<where>
+		AND o.service_id = 5
+		AND o.deal_stat = #{dealStat}
+		AND o.seller_user_id IN 
+		<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
+		    #{uId}
+		</foreach>
+		<include refid="queryHyCountWhereOtherLike"/>
+		</where>
+		ORDER BY o.send_time DESC
+		LIMIT #{startRecord}, #{pageSize}
+	</select>
+	
+	<select id="getRelationOrders" resultType="com.chetong.ctwechat.entity.mapping.FmOrder"
+		parameterType="com.chetong.ctwechat.entity.mapping.FmOrder">
+		SELECT
+		id as id,
+		deal_stat as dealStat,
+		order_no as orderNo,
+		case_no as caseNo,
+		car_no as carNo,
+		buyer_user_id as buyerUserId,
+		buyer_user_name as buyerUserName,
+		seller_user_id as sellerUserId,
+		service_id AS serviceId,
+		subject_id as subjectId,
+		is_alow as isAlow,
+		link_man as linkMan,
+		link_tel as linkTel,
+		send_time as sendTime,
+		alow_money as alowMoney,
+		work_address as workAddress,
+		order_type as orderType,
+		is_simple as isSimple,
+		delegate_desc as delegateDesc
+		FROM
+		fm_order
+		<where>
+			and service_id = 1
+			<if test="caseNo != null">
+				and case_no = #{caseNo}
+			</if>
+			and deal_stat in ('04','05','06','07','08','09')
+		</where>
+	</select>
+	
+	<!-- 判断是否永诚订单 -->
+	<select id="getYcOrderRelation" resultType="java.util.Map" parameterType ="java.lang.String">
+		SELECT 
+		  CAST(t.id AS CHAR) AS id,
+		  t.order_no AS orderNO,
+		  CAST(t.task_id AS CHAR) AS taskId,
+		  CAST(t.work_id AS CHAR) AS workId,
+		  t.work_type AS workType 
+		FROM
+		  fm_task_order_work_relation t ,
+		  fm_task_info ti
+		WHERE 
+		t.task_id = ti.id 
+		AND t.order_no = #{orderNo} 
+		AND ti.source = '1'
+	</select>
+			
+	<!-- 微信管理端的查询 end -->
+</mapper>

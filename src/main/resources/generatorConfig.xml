@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<classPathEntry
+		location="F:\localRepository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar" />
+	<context id="context1">
+		<commentGenerator>
+			<property name="suppressDate" value="false" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection connectionURL="jdbc:mysql://localhost:3306/world"
+			driverClass="com.mysql.jdbc.Driver" password="512518do" userId="root" />
+		<javaModelGenerator targetPackage="cn.alexzhou.demoservice.entity"
+			targetProject="demo-service" />
+		<sqlMapGenerator targetPackage="cn.alexzhou.demoservice.entity"
+			targetProject="demo-service" />
+		<!-- <javaClientGenerator targetPackage="cn.alexzhou.demoservice.service" -->
+		<!-- targetProject="demo-service" type="XMLMAPPER" /> -->
+		<table tableName="city" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+		<table tableName="country" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+		<table tableName="countrylanguage" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false"></table>
+	</context>
+</generatorConfiguration>

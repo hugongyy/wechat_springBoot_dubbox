@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ct_bind_info_MAPPER">
+
+	<!--实体映射-->
+	<resultMap id="ctBindInfoResultMap" type="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+		<!---->
+		<id property="id" column="id" />
+		<!--绑定类型:1-微信,2-懒掌柜,-->
+		<result property="bindType" column="bind_type" />
+		<!--用户ID-->
+		<result property="userId" column="user_id" />
+		<!--第三方唯一标识(字符串),微信的openId,懒掌柜的managerId-->
+		<result property="bindId" column="bind_id" />
+		<!--第三方账号:微信号,-->
+		<result property="bindNo" column="bind_no" />
+		<!--昵称-->
+		<result property="nickname" column="nickname" />
+		<!--头像-->
+		<result property="headPic" column="head_pic" />
+		<!--创建者-->
+		<result property="createId" column="create_id" />
+		<!--创建时间-->
+		<result property="createTime" column="create_time" />
+	</resultMap>
+
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	bind_type,	user_id,	bind_id,	bind_no,	nickname,	head_pic,	create_id,	create_time
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultMap="ctBindInfoResultMap" parameterType="java.lang.Long">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM ct_bind_info
+		 WHERE id = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		 DELETE FROM ct_bind_info
+		 WHERE id = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+		 INSERT INTO ct_bind_info
+ 		(id,bind_type,user_id,bind_id,bind_no,nickname,head_pic,create_id,create_time) 
+		 VALUES 
+ 		(#{id},#{bindType},#{userId},#{bindId},#{bindNo},#{nickname},#{headPic},#{createId},#{createTime}) 
+	</insert>
+
+	<!-- 添加 （匹配有值的字段）-->
+	<insert id="insertSelective" parameterType="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+		 INSERT INTO ct_bind_info
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="bindType != null">
+				 bind_type,
+			</if>
+			<if test="userId != null">
+				 user_id,
+			</if>
+			<if test="bindId != null">
+				 bind_id,
+			</if>
+			<if test="bindNo != null">
+				 bind_no,
+			</if>
+			<if test="nickname != null">
+				 nickname,
+			</if>
+			<if test="headPic != null">
+				 head_pic,
+			</if>
+			<if test="createId != null">
+				 create_id,
+			</if>
+				 create_time,
+
+		 </trim>
+		 <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="bindType!=null">
+				 #{bindType},
+			</if>
+			<if test="userId!=null">
+				 #{userId},
+			</if>
+			<if test="bindId!=null">
+				 #{bindId},
+			</if>
+			<if test="bindNo!=null">
+				 #{bindNo},
+			</if>
+			<if test="nickname!=null">
+				 #{nickname},
+			</if>
+			<if test="headPic!=null">
+				 #{headPic},
+			</if>
+			<if test="createId!=null">
+				 #{createId},
+			</if>
+				 SYSDATE()
+		 </trim>
+	</insert>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKeySelective" parameterType="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+		 UPDATE ct_bind_info
+ 		 <set> 
+			<if test="bindType != null">
+				 bind_type = #{bindType},
+			</if>
+			<if test="userId != null">
+				 user_id = #{userId},
+			</if>
+			<if test="bindId != null">
+				 bind_id = #{bindId},
+			</if>
+			<if test="bindNo != null">
+				 bind_no = #{bindNo},
+			</if>
+			<if test="nickname != null">
+				 nickname = #{nickname},
+			</if>
+			<if test="headPic != null">
+				 head_pic = #{headPic},
+			</if>
+			<if test="createId != null">
+				 create_id = #{createId},
+			</if>
+				 create_time = SYSDATE()
+
+ 		 </set>
+		 WHERE id = #{id}
+	</update>
+
+	<!-- 修 改-->
+	<update id="updateByPrimaryKey" parameterType="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+		 UPDATE ct_bind_info
+		 SET 
+			 bind_type = #{bindType},
+			 user_id = #{userId},
+			 bind_id = #{bindId},
+			 bind_no = #{bindNo},
+			 nickname = #{nickname},
+			 head_pic = #{headPic},
+			 create_id = #{createId},
+			 create_time = SYSDATE()
+		 WHERE id = #{id}
+	</update>
+	
+	<select id="getBindInfo" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.CtUser">
+		SELECT
+			u.id AS id,
+			u.login_pwd AS loginPwd,
+			u.user_type as userType,
+			u.is_sub as isSub,
+		    u.chk_stat as chkStat,
+		    u.stat as stat,
+		    u.ac_stat as acStat,
+		    u.bank_chk_stat as bankChkStat,
+		    u.service_stat as serviceStat,
+		    u.origin as origin,
+		    u.login_name as loginName,
+		    u.email as email,
+		    u.mobile as mobile,
+		    u.lastname as lastname,
+		    u.firstname as firstname,
+		    u.department as department,
+		    u.pin as pin,
+		    u.birthday as birthday,
+		    u.sex as sex,
+		    u.reg_time as regTime,
+		    u.last_time as lastTime,
+		    u.last_ip as lastIp,
+		    u.mail_prov_code as mailProvCode,
+		    u.mail_city_code as mailCityCode,
+		    u.mail_area_code as mailAreaCode,
+		    u.mail_prov_desc as mailProvDesc,
+		    u.mail_city_desc as mailCityDesc,
+		    u.mail_area_desc as mailAreaDesc,
+		    u.mail_address as mailAddress,
+		    u.my_credit as myCredit,
+		    u.is_fanhua as isFanhua,
+		    u.sound as sound,
+		    u.org_name as orgName,
+		    u.org_short_name as orgShortName,
+		    u.sign_rescue as signRescue,
+		    u.is_mgr as isMgr,
+		    b.bind_id as weichatid,
+		    u.errorlogin_num as errorLoginNum,
+		    u.token as token,
+		    u.token_createtime as tokenCreatetime,
+		    u.is_seed_person as isSeedPerson,
+		    u.is_start_group as isStartGroup,
+		    u.show_price as showPrice,
+		    u.is_start as isStart
+		FROM
+			ct_user u
+		LEFT JOIN ct_bind_info b ON u.id = b.user_id
+		<where>
+			<if test="id != null">
+		         and u.id=#{id}
+	        </if>
+	        <if test="weichatid != null">
+	           and b.bind_id=#{weichatid}
+	        </if>
+	        <if test="loginName != null">
+	           and u.login_name=#{loginName}
+	        </if>
+		</where>
+	</select>
+	
+	<delete id="unbindWechat" parameterType="java.util.Map">
+		DELETE
+		FROM
+			ct_bind_info 
+		WHERE
+			user_id = #{userId}
+		AND bind_id = #{openId}
+	</delete>
+
+</mapper>
