@@ -3,6 +3,7 @@ package com.chetong.ctwechat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableTransactionManagement
 //@ServletComponentScan
-//@ImportResource("classpath:config/dubbo-provider.xml")
+@ImportResource("classpath:config/dubbo-provider.xml")
 public class MainApplication {
 	
 	public static void main(String[] args) throws Exception {

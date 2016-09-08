@@ -499,6 +499,58 @@
 		AND t.order_no = #{orderNo} 
 		AND ti.source = '1'
 	</select>
-			
+	
+	<select id="autoSendOverTimeOrder2SellerAndOrg" resultType="com.chetong.ctwechat.entity.mapping.FmOrder" parameterType ="java.util.Map">
+		select 
+		g.user_id as groupUserId, 
+		b.bind_id as ext7,
+		b2.bind_id as ext8,
+		o.id as id,
+		o.service_id as serviceId,
+		o.subject_id as subjectId,
+		o.order_no as orderNo,
+		o.deal_stat as dealStat,
+		o.order_type as orderType,
+		o.case_no as caseNo,
+		o.ext1 as ext1,
+		o.ext2 as ext2,
+		o.buyer_user_name as buyerUserName,
+		o.buyer_user_id as buyerUserId,
+		
+		o.payer_user_id as payerUserId,
+		o.seller_user_name as sellerUserName,
+		s.mobile as sellerUserType,
+		o.send_id as sendId,
+		o.send_time as sendTime, 
+		o.get_time as getTime
+		from fm_order o
+		left join ct_group g on ( case when o.ext2 in 
+		<foreach collection="spAreas" item="area" open="(" separator="," close=")">
+             #{area}
+        </foreach>
+ 		then (case when  g.city_code = o.ext2  then 1 else 2 end ) ELSE (case when  g.prov_code = o.ext1  then 1 else 2 end )  END ) = 1
+		inner JOIN ct_user u2 on g.user_id = u2.id and u2.user_type = '1'
+		left join ct_bind_info b on b.user_id = o.seller_user_id
+		left join ct_bind_info b2 on b2.user_id = g.user_id
+		left join ct_user s on s.id = o.seller_user_id
+		where o.service_id = 1
+		and o.import_type = '0'
+		and o.deal_stat = '04'
+		and ( (o.order_type = '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 11 and 12) 
+			or  (o.order_type != '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 23 and 24) )
+		and (b.bind_id is not null OR b2.bind_id is not null)
+	</select>
+	
+	<select id="queryAllHaveNotSendOutMsg" resultType="com.chetong.ctwechat.entity.mapping.CmsOutBox" parameterType ="com.chetong.ctwechat.entity.mapping.CmsOutBox">
+		SELECT o.id AS id, o.user_id AS userId, o.msg_type AS msgType, b.bind_id AS msgTo, o.msg_from AS msgFrom, o.msg_content AS msgContent, 
+		o.send_flag AS sendFlag, o.send_time AS sendTime, o.send_num AS sendNum, o.create_by AS createBy, o.create_time AS createTime 
+		FROM cms_out_box o LEFT JOIN ct_bind_info b ON o.user_id = b.user_id 
+		WHERE o.msg_type = '1' AND o.send_flag != '1'
+		<![CDATA[
+		AND o.send_num < 3
+		]]>
+		AND b.bind_id IS NOT NULL ORDER BY o.send_flag, o.id DESC
+	</select>
+
 	<!-- 微信管理端的查询 end -->
 </mapper>

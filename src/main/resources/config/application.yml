@@ -33,4 +33,5 @@ headerUrl: http://dev.chetong.net/
 
 appid: wx8eda4c135b1ad9f7
 appsecret: 7a6d09c0f8a25118f109785d942f09f1
-WE_CHAT_PUSH_SWITCH: YES
+WE_CHAT_PUSH_SWITCH: Y
+dubbo.group: develop

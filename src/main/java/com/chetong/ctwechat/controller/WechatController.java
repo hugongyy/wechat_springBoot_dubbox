@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
-import com.chetong.ctwechat.entity.model.BasesModel;
 import com.chetong.ctwechat.entity.model.QueryOrderBaseBean;
 import com.chetong.ctwechat.entity.model.WeChatHyResponseModel;
 import com.chetong.ctwechat.entity.model.WeChatResponseModel;
@@ -218,12 +217,18 @@ public class WechatController {
 	
 	@RequestMapping(value = "/savePushMsg4Wechat", method = RequestMethod.POST)
 	@ResponseBody
-	public BasesModel savePushMsg4Wechat(@RequestBody ModelMap map ) {
-		BasesModel response = new BasesModel();
-		String userId = (String)map.get("userId");
-		String content = (String)map.get("content");
-		String createBy = (String)map.get("createBy");
-		
+	public Long savePushMsg4Wechat(@RequestBody ModelMap map) {
+		String userId = (String) map.get("userId");
+		String content = (String) map.get("content");
+		String createBy = (String) map.get("createBy");
+
 		return pushMessageService.savePushMsg4Wechat(Long.parseLong(userId), content, createBy);
 	}
+	
+	@RequestMapping(value = "/autoSendOverTimeOrder2SellerAndOrg", method = RequestMethod.GET)
+	@ResponseBody
+	public void autoSendOverTimeOrder2SellerAndOrg() {
+		pushMessageService.autoSendOverTimeOrder2SellerAndOrg();
+	}
+	
 }
