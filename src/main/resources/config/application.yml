@@ -1,6 +1,7 @@
 
 server:
   port: 8084
+  ##context-path: /ctwechat/
 spring:
     datasource:
         name: test

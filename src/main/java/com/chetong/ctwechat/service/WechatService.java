@@ -10,10 +10,10 @@ public interface WechatService {
 
 	WeChatResponseModel hyOrdersStatisticsNum(String userId, String otherLike);
 
-	WeChatResponseModel cxOrdersSelect(String userId, String workType, String otherLike, String orderState, Long page,
+	WeChatResponseModel cxOrdersSelect(String userId, String workType, String otherLike, String orderState, Integer page,
 			Integer pageSize);
 
-	WeChatHyResponseModel hyOrdersSelect(String userId, String workType, String otherLike, String orderState, Long page,
+	WeChatHyResponseModel hyOrdersSelect(String userId, String workType, String otherLike, String orderState, Integer page,
 			Integer pageSize);
 
 	QueryOrderBaseBean getRelationOrders(Long userId, String caseNo, String token);

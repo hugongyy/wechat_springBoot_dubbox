@@ -443,7 +443,7 @@ public class WechatServiceImpl implements WechatService {
 	 */
 	@Override
 	public WeChatResponseModel cxOrdersSelect(String userId, String workType, String otherLike, String dealStat,
-			Long page, Integer pageSize) {
+			Integer page, Integer pageSize) {
 		WeChatResponseModel response = new WeChatResponseModel();
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<FmOrder> list = null;
@@ -471,7 +471,7 @@ public class WechatServiceImpl implements WechatService {
 		provCode = u.getMailProvCode();
 		cityCode = u.getMailCityCode();
 
-		Long startRecord = (page - 1) * pageSize;
+		Integer startRecord = (page - 1) * pageSize;
 
 		if ("0".equals(u.getUserType()) && "1".equals(u.getIsMgr())) {
 			userTypeLabel = "PM";
@@ -618,7 +618,7 @@ public class WechatServiceImpl implements WechatService {
 	 */
 	@Override
 	public WeChatHyResponseModel hyOrdersSelect(String userId, String workType, String otherLike, String dealStat,
-			Long page, Integer pageSize) {
+			Integer page, Integer pageSize) {
 		WeChatHyResponseModel response = new WeChatHyResponseModel();
 		Map<String, Object> param = new HashMap<String, Object>();
 		List<Map<String, Object>> list = null;
@@ -648,7 +648,7 @@ public class WechatServiceImpl implements WechatService {
 		provCode = u.getMailProvCode();
 		cityCode = u.getMailCityCode();
 
-		Long startRecord = (page - 1) * pageSize;
+		Integer startRecord = (page - 1) * pageSize;
 
 		if ("0".equals(u.getUserType()) && "1".equals(u.getIsMgr())) {
 			userTypeLabel = "PM";

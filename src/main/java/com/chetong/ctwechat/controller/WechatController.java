@@ -135,7 +135,7 @@ public class WechatController {
 		String workType = (String) map.get("workType");
 		String otherLike = (String) map.get("otherLike");
 		String orderState = (String) map.get("orderState");
-		Long page = (Long) map.get("page");
+		Integer page = (Integer) map.get("page");
 		Integer pageSize = (Integer) map.get("pageSize");
 
 		if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(workType) || StringUtils.isEmpty(orderState)) {
@@ -145,7 +145,7 @@ public class WechatController {
 		}
 
 		if (page == null || pageSize == null) {
-			page = 1L;
+			page = 1;
 			pageSize = 10;
 		}
 		otherLike = "".equals(otherLike) ? null : otherLike;
@@ -168,7 +168,7 @@ public class WechatController {
 		String workType = "0";
 		String otherLike = (String) map.get("otherLike");
 		String orderState = (String) map.get("orderState");
-		Long page = (Long) map.get("page");
+		Integer page = (Integer) map.get("page");
 		Integer pageSize = (Integer) map.get("pageSize");
 
 		if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(workType) || StringUtils.isEmpty(orderState)) {
@@ -178,7 +178,7 @@ public class WechatController {
 		}
 
 		if (page == null || pageSize == null) {
-			page = 1L;
+			page = 1;
 			pageSize = 10;
 		}
 		otherLike = "".equals(otherLike) ? null : otherLike;

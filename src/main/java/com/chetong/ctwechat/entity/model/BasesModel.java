@@ -3,7 +3,7 @@ package com.chetong.ctwechat.entity.model;
 public class BasesModel {
 	private String code;
 	private String message;
-	private Long page;
+	private Integer page;
 	private Integer pageSize;
 	private String keyWords; // 搜索关键字
 	private String orderUrl; // 转到H5的链接.
@@ -24,11 +24,11 @@ public class BasesModel {
 		this.message = message;
 	}
 
-	public Long getPage() {
+	public Integer getPage() {
 		return page;
 	}
 
-	public void setPage(Long page) {
+	public void setPage(Integer page) {
 		this.page = page;
 	}
 
