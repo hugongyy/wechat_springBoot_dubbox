@@ -25,7 +25,7 @@ public class MainApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(Application.class);
+		return application.sources(MainApplication.class);
 	}
 
 	@Bean
