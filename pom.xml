@@ -166,7 +166,8 @@
 		</dependency>
 	</dependencies>
 
-	<build>		
+	<build>	
+		<finalName>ctwechat</finalName>	
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
