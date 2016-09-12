@@ -128,7 +128,7 @@
 		<dependency>
 			<groupId>com.chetong.aic</groupId>
 			<artifactId>aic-dictionary</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.4-dev</version>
 			<classifier>classes</classifier>
 			<type>jar</type>
 			<exclusions>
