@@ -4,7 +4,7 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://55700a861f093.gz.cdb.myqcloud.com:9709/valet_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
+        url: jdbc:mysql://10.66.132.211:3306/valet_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
         username: root
         password: chetong@828
         type: com.alibaba.druid.pool.DruidDataSource
