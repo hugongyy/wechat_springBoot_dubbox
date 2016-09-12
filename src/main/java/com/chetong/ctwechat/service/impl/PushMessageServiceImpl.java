@@ -105,36 +105,44 @@ public class PushMessageServiceImpl implements PushMessageService {
 			.append("\n派单时间:").append(order.getSendTimeLabel())
 			.append("</a>");	
 			
-			if (StringUtils.isNotEmpty(sellerWechatId)) {
-				result = sendTextMessageToUser(content.toString(), sellerWechatId,  TokenThread.access);
-				CmsOutBox cob = new CmsOutBox();
-				cob.setUserId(sellerUserId);
-				cob.setMsgType("1");
-				cob.setMsgTo(sellerWechatId);
-				cob.setMsgContent(content.toString());
-				cob.setSendFlag(result);
-				cob.setSendTime(now);
-				cob.setSendNum(1);
-				cob.setCreateBy("0");
-				cob.setCreateTime(now);
-				
-				commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
-				
+			try {
+				if (StringUtils.isNotEmpty(sellerWechatId)) {
+					result = sendTextMessageToUser(content.toString(), sellerWechatId, TokenThread.access);
+					CmsOutBox cob = new CmsOutBox();
+					cob.setUserId(sellerUserId);
+					cob.setMsgType("1");
+					cob.setMsgTo(sellerWechatId);
+					cob.setMsgContent(content.toString());
+					cob.setSendFlag(result);
+					cob.setSendTime(now);
+					cob.setSendNum(1);
+					cob.setCreateBy("0");
+					cob.setCreateTime(now);
+
+					commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
+
+				}
+			} catch (Exception e) {
+				log.error(e);
 			}
-			if (StringUtils.isNotEmpty(orgWechatId)) {
-				result = sendTextMessageToUser(content.toString(), orgWechatId,  TokenThread.access);
-				CmsOutBox cob = new CmsOutBox();
-				cob.setUserId(orgUserId);
-				cob.setMsgType("1");
-				cob.setMsgTo(orgWechatId);
-				cob.setMsgContent(content.toString());
-				cob.setSendFlag(result);
-				cob.setSendTime(now);
-				cob.setSendNum(1);
-				cob.setCreateBy("0");
-				cob.setCreateTime(now);
-				
-				commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
+			try {				
+				if (StringUtils.isNotEmpty(orgWechatId)) {
+					result = sendTextMessageToUser(content.toString(), orgWechatId, TokenThread.access);
+					CmsOutBox cob = new CmsOutBox();
+					cob.setUserId(orgUserId);
+					cob.setMsgType("1");
+					cob.setMsgTo(orgWechatId);
+					cob.setMsgContent(content.toString());
+					cob.setSendFlag(result);
+					cob.setSendTime(now);
+					cob.setSendNum(1);
+					cob.setCreateBy("0");
+					cob.setCreateTime(now);
+
+					commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
+				}
+			} catch (Exception e) {
+				log.error(e);
 			}
 		}
 	}

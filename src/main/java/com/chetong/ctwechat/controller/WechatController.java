@@ -160,6 +160,11 @@ public class WechatController {
 		return response;
 	}
 
+	/**
+	 * 货运险列表(list)
+	 * @param map
+	 * @return
+	 */
 	@RequestMapping(value = "/hyOrdersSelect", method = RequestMethod.POST)
 	@ResponseBody
 	public WeChatHyResponseModel hyOrdersSelect(@RequestBody ModelMap map) {
