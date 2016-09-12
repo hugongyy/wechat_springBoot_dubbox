@@ -18,8 +18,8 @@
 			<id>nexus-local</id>
 			<name>local private nexus</name>
 			<!-- <url>http://10.104.8.19:8081/nexus/content/groups/public</url> -->
-			<url>http://10.104.9.72:8081/repository/maven-public/</url>
-			<!-- <url>http://119.145.1.179:8081/repository/maven-public/</url> -->
+			<!-- <url>http://10.104.9.72:8081/repository/maven-public/</url> -->
+			<url>http://119.145.1.179:8081/repository/maven-public/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
