@@ -1,8 +1,8 @@
 package com.chetong.ctwechat.entity.model;
 
-import java.util.List;
 import java.util.Map;
 
+import com.chetong.aic.page.domain.PageList;
 import com.chetong.ctwechat.entity.mapping.CtUser;
 import com.chetong.ctwechat.entity.mapping.FmOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -12,7 +12,7 @@ public class WeChatResponseModel extends BasesModel {
 
 	private CtUser ctUser;
 	private FmOrder fmOrder;// 订单表
-	private List<FmOrder> list;
+	private PageList<FmOrder> list;
 	private Map<String, Integer> count;
 
 	public CtUser getCtUser() {
@@ -31,11 +31,11 @@ public class WeChatResponseModel extends BasesModel {
 		this.fmOrder = fmOrder;
 	}
 
-	public List<FmOrder> getList() {
+	public PageList<FmOrder> getList() {
 		return list;
 	}
 
-	public void setList(List<FmOrder> list) {
+	public void setList(PageList<FmOrder> list) {
 		this.list = list;
 	}
 

@@ -6,13 +6,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.chetong.aic.page.domain.PageBounds;
+import com.chetong.aic.page.domain.PageList;
 import com.chetong.aic.util.PHPMd5;
 import com.chetong.aic.util.StringUtil;
 import com.chetong.ctwechat.dao.CommExeSqlDAO;
@@ -48,7 +53,7 @@ public class WechatServiceImpl implements WechatService {
 		spAreas.add("210200"); // 大连
 	}
 
-	@Autowired
+	@Resource
 	private CommExeSqlDAO commExeSqlDAO;
 
 	/**
@@ -446,7 +451,7 @@ public class WechatServiceImpl implements WechatService {
 			Integer page, Integer pageSize) {
 		WeChatResponseModel response = new WeChatResponseModel();
 		Map<String, Object> param = new HashMap<String, Object>();
-		List<FmOrder> list = null;
+		PageList<FmOrder> list = null;
 		String userIds = null;
 		String subUserIds = null;
 		String[] userIdArr = null;
@@ -471,7 +476,11 @@ public class WechatServiceImpl implements WechatService {
 		provCode = u.getMailProvCode();
 		cityCode = u.getMailCityCode();
 
-		Integer startRecord = (page - 1) * pageSize;
+		PageBounds pageBounds = new PageBounds();
+		pageBounds.setPage(page);
+		pageBounds.setLimit(pageSize);
+
+		// Integer startRecord = (page - 1) * pageSize;
 
 		if ("0".equals(u.getUserType()) && "1".equals(u.getIsMgr())) {
 			userTypeLabel = "PM";
@@ -492,11 +501,11 @@ public class WechatServiceImpl implements WechatService {
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
 
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 
 			// 分页查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryOrderList4Org", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Org", param, pageBounds);
 
 		} else if ("1".equals(u.getUserType())) {
 			// 机构
@@ -524,10 +533,10 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				param.put("startRecord", startRecord);
-				param.put("pageSize", pageSize);
+				// param.put("startRecord", startRecord);
+				// param.put("pageSize", pageSize);
 				// 分页查询
-				list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryOrderList4Org", param);
+				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Org", param, pageBounds);
 
 			} else {
 				userTypeLabel = "Company";
@@ -555,10 +564,10 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				param.put("startRecord", startRecord);
-				param.put("pageSize", pageSize);
+				// param.put("startRecord", startRecord);
+				// param.put("pageSize", pageSize);
 				// 分页查询
-				list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryOrderList4Company", param);
+				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Company", param, pageBounds);
 
 			}
 		} else if ("2".equals(u.getUserType())) {
@@ -577,10 +586,10 @@ public class WechatServiceImpl implements WechatService {
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 			// 查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryOrderList4Seller", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Seller", param, pageBounds);
 
 		} else if ("0".equals(u.getUserType()) && !"1".equals(u.getIsMgr())) {
 			userTypeLabel = "Seller";
@@ -591,10 +600,10 @@ public class WechatServiceImpl implements WechatService {
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
 
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 			// 查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryOrderList4Seller", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Seller", param, pageBounds);
 		}
 
 		// 处理数据.
@@ -605,6 +614,7 @@ public class WechatServiceImpl implements WechatService {
 		}
 
 		response.setList(list);
+		response.setTotalCount(list.getPaginator().getTotalCount());
 		response.setCtUser(u);
 		response.setPage(page);
 		response.setCode("success");
@@ -621,7 +631,7 @@ public class WechatServiceImpl implements WechatService {
 			Integer page, Integer pageSize) {
 		WeChatHyResponseModel response = new WeChatHyResponseModel();
 		Map<String, Object> param = new HashMap<String, Object>();
-		List<Map<String, Object>> list = null;
+		PageList<Map<String, Object>> list = null;
 		String userIds = null;
 		String subUserIds = null;
 		String[] userIdArr = null;
@@ -648,7 +658,11 @@ public class WechatServiceImpl implements WechatService {
 		provCode = u.getMailProvCode();
 		cityCode = u.getMailCityCode();
 
-		Integer startRecord = (page - 1) * pageSize;
+		PageBounds pageBounds = new PageBounds();
+		pageBounds.setPage(page);
+		pageBounds.setLimit(pageSize);
+
+		// Integer startRecord = (page - 1) * pageSize;
 
 		if ("0".equals(u.getUserType()) && "1".equals(u.getIsMgr())) {
 			userTypeLabel = "PM";
@@ -668,11 +682,12 @@ public class WechatServiceImpl implements WechatService {
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 
 			// 分页查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryHyOrderList4Org", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryHyOrderList4Org", param, pageBounds);
+
 		} else if ("1".equals(u.getUserType())) {
 			userTypeLabel = "Org";
 			// 机构
@@ -699,10 +714,10 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				param.put("startRecord", startRecord);
-				param.put("pageSize", pageSize);
+				// param.put("startRecord", startRecord);
+				// param.put("pageSize", pageSize);
 				// 分页查询
-				list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryHyOrderList4Org", param);
+				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryHyOrderList4Org", param, pageBounds);
 
 			} else {
 				userTypeLabel = "Company";
@@ -736,10 +751,10 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				param.put("startRecord", startRecord);
-				param.put("pageSize", pageSize);
+				// param.put("startRecord", startRecord);
+				// param.put("pageSize", pageSize);
 				// 分页查询
-				list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryHyOrderList4Company", param);
+				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryHyOrderList4Company", param, pageBounds);
 
 			}
 		} else if ("2".equals(u.getUserType())) {
@@ -758,10 +773,10 @@ public class WechatServiceImpl implements WechatService {
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 			// 查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryHyOrderList4Seller", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryHyOrderList4Seller", param, pageBounds);
 
 		} else if ("0".equals(u.getUserType()) && !"1".equals(u.getIsMgr())) {
 			userTypeLabel = "Seller";
@@ -771,10 +786,11 @@ public class WechatServiceImpl implements WechatService {
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
-			param.put("startRecord", startRecord);
-			param.put("pageSize", pageSize);
+			// param.put("startRecord", startRecord);
+			// param.put("pageSize", pageSize);
 			// 查询
-			list = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryHyOrderList4Seller", param);
+			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryHyOrderList4Seller", param, pageBounds);
+
 		}
 
 		// 处理数据.
@@ -791,6 +807,7 @@ public class WechatServiceImpl implements WechatService {
 		}
 
 		response.setList(list);
+		response.setTotalCount(list.getPaginator().getTotalCount());
 		response.setCtUser(u);
 		response.setPage(page);
 		response.setCode("success");

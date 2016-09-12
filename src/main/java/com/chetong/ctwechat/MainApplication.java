@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableTransactionManagement
 // @ServletComponentScan
-@ImportResource("classpath:config/dubbo-provider.xml")
+@ImportResource("classpath:config/spring-config.xml")
 public class MainApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws Exception {
