@@ -32,7 +32,6 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<aic.version>0.0.1-SNAPSHOT</aic.version>
-		<aic.version>0.0.1-SNAPSHOT</aic.version>
 	</properties>
 
 	<dependencies>
