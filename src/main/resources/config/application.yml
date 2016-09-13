@@ -4,7 +4,7 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://10.66.132.211:3306/valet_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
+        url: jdbc:mysql://10.66.132.211:3306/prd1104?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
         username: root
         password: chetong@828
         type: com.alibaba.druid.pool.DruidDataSource
@@ -29,10 +29,10 @@ mybatis:
   config-location: classpath:config/mybatis_config.xml
 
 ## 自定义配置
-headerUrl: http://dev.chetong.net/
+headerUrl: http://qa.chetong.net/
 
 appid: wx8eda4c135b1ad9f7
 appsecret: 7a6d09c0f8a25118f109785d942f09f1
 WE_CHAT_PUSH_SWITCH: Y
 zookeeper.address: 10.249.145.160:2181
-dubbo.group: develop
+dubbo.group: release
