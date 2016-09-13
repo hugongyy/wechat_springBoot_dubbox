@@ -251,6 +251,8 @@
 		<where>
 			AND o.import_type = '0'
 			AND o.service_id = 1
+			<if test="dealStat != null">
+			
 			<choose>
 			    <when test='dealStat == "20"'>
 			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
@@ -259,6 +261,8 @@
 					AND o.deal_stat = #{dealStat}        
 			    </otherwise>
 			</choose>
+			</if>
+			<if test="workType != null">
 			<choose>
 			    <when test="workType == 0">	<!-- 本地 -->
 			        AND o.is_remote = '0'
@@ -273,6 +277,7 @@
 			        AND o.is_remote = '9'
 			    </otherwise>
 			</choose>
+			</if>
 			AND (o.buyer_user_id IN 
 			<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
 			    #{uId}
@@ -288,7 +293,7 @@
 		
 		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			LIMIT #{startRecord}, #{pageSize}
+			
 		</if>
 	</select>
 	
@@ -297,6 +302,7 @@
 		<where>
 			AND o.import_type = '0'
 			AND o.service_id = 1
+			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
 			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
@@ -305,10 +311,13 @@
 					AND o.deal_stat = #{dealStat}        
 			    </otherwise>
 			</choose>
+			</if>
+			<if test="workType != null">
 			<choose>
 			    <when test="workType == 0">	<!-- 本地 -->
 			        AND o.is_remote = '0'
-			        AND ( o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+			        AND ( o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 
+			        AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
 			        	OR o.send_id = #{userId} )
 			    </when>
 			    <when test="workType == 1">	<!-- 异地作业地 -->
@@ -327,19 +336,37 @@
 			    <when test="workType == 2">	<!-- 异地委托地 -->
 			        AND o.is_remote = '1'
 			        AND (o.buyer_user_id IN (SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1
-			        AND t.grant_type = '1' AND (t.apply_id_a = #{userId} ) )
+			        AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
 			         OR o.send_id = #{userId} )
 			    </when>
 			    <otherwise>
 			        AND o.is_remote = '9'
 			    </otherwise>
 			</choose>
+			</if>
+			<if test="workType == null">
+				AND ( (o.buyer_user_id IN (SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1
+		        AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
+		         OR o.send_id = #{userId} )
+		        OR ( o.is_remote = '1'
+		        <if test="provCode != null">
+		            AND o.ext1 = #{provCode} 
+		            AND o.ext2 NOT IN 
+		            <foreach collection="spAreas" item="cCode" open="(" separator="," close=")">
+					    #{cCode}
+					</foreach>
+		        </if>
+		        <if test="cityCode != null">
+		            AND o.ext2 = #{cityCode}
+		        </if>
+		        ) )
+			</if>
 			<include refid="queryCountWhereOtherLike"/>
 			<include refid="queryOrderListWhereRules"/>
 		</where>
 		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			LIMIT #{startRecord}, #{pageSize}
+			
 		</if>
 	</select>
 	
@@ -348,6 +375,7 @@
 		<where>
 			AND o.import_type = '0'
 			AND o.service_id = 1
+			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
 			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
@@ -356,6 +384,8 @@
 					AND o.deal_stat = #{dealStat}        
 			    </otherwise>
 			</choose>
+			</if>
+			<if test="workType != null">
 			<choose>
 			    <when test="workType == 0">	<!-- 本地 -->
 			        AND o.is_remote = '0'
@@ -370,6 +400,7 @@
 			        AND o.is_remote = '9'
 			    </otherwise>
 			</choose>
+			</if>
 			AND o.seller_user_id IN 
 			<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
 			    #{uId}
@@ -378,7 +409,7 @@
 		</where>
 		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			LIMIT #{startRecord}, #{pageSize}
+			
 		</if>
 	</select>
 		<!-- 货运险 -->
@@ -406,7 +437,9 @@
 		<include refid="queryHyOrderListMap"/>
 		<where>
 		AND o.service_id = 5
+		<if test="dealStat != null">
 		AND o.deal_stat = #{dealStat}
+		</if>
 		AND (o.buyer_user_id IN 
 		<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
 		    #{uId}
@@ -419,27 +452,29 @@
 		<include refid="queryHyCountWhereOtherLike"/>
 		</where>
 		ORDER BY o.send_time DESC
-		LIMIT #{startRecord}, #{pageSize}
 	</select>
 	
 	<select id="queryHyOrderList4Org" parameterType="java.util.Map" resultType="java.util.Map">
 		<include refid="queryHyOrderListMap"/>
 		<where>
 		AND o.service_id = 5
+		<if test="dealStat != null">
 		AND o.deal_stat = #{dealStat}
+		</if>
 		AND ( o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
 			OR o.send_user_id = #{userId} )
 		<include refid="queryHyCountWhereOtherLike"/>
 		</where>
 		ORDER BY o.send_time DESC
-		LIMIT #{startRecord}, #{pageSize}
 	</select>
 	
 	<select id="queryHyOrderList4Seller" parameterType="java.util.Map" resultType="java.util.Map">
 		<include refid="queryHyOrderListMap"/>
 		<where>
 		AND o.service_id = 5
+		<if test="dealStat != null">
 		AND o.deal_stat = #{dealStat}
+		</if>
 		AND o.seller_user_id IN 
 		<foreach collection="userIdArr" item="uId" open="(" separator="," close=")">
 		    #{uId}
@@ -447,7 +482,7 @@
 		<include refid="queryHyCountWhereOtherLike"/>
 		</where>
 		ORDER BY o.send_time DESC
-		LIMIT #{startRecord}, #{pageSize}
+		
 	</select>
 	
 	<select id="getRelationOrders" resultType="com.chetong.ctwechat.entity.mapping.FmOrder"

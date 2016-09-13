@@ -159,6 +159,40 @@ public class WechatController {
 		}
 		return response;
 	}
+	
+	/**
+	 * 车险订单查询（list）
+	 */
+	@RequestMapping(value = "/cxOrdersList", method = RequestMethod.POST)
+	@ResponseBody
+	public WeChatResponseModel cxOrdersList(@RequestBody ModelMap map) {
+		WeChatResponseModel response = new WeChatResponseModel();
+		String userId = (String) map.get("userId");
+		String otherLike = (String) map.get("otherLike");
+		Integer page = (Integer) map.get("page");
+		Integer pageSize = (Integer) map.get("pageSize");
+
+		if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(otherLike)) {
+			response.setCode("fail");
+			response.setMessage("必要参数为空");
+			return response;
+		}
+
+		if (page == null || pageSize == null) {
+			page = 1;
+			pageSize = 10;
+		}
+		otherLike = "".equals(otherLike) ? null : otherLike;
+
+		try {
+			response = wechatService.cxOrdersSelect(userId, null, otherLike, null, page, pageSize);
+		} catch (Exception e) {
+			log.error(e);
+			response.setCode("fail");
+			response.setMessage("车险订单查询失败");
+		}
+		return response;
+	}
 
 	/**
 	 * 货运险列表(list)
@@ -197,7 +231,50 @@ public class WechatController {
 		}
 		return response;
 	}
+	
+	/**
+	 * 货运险列表(list)
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/hyOrdersList", method = RequestMethod.POST)
+	@ResponseBody
+	public WeChatHyResponseModel hyOrdersList(@RequestBody ModelMap map) {
+		WeChatHyResponseModel response = new WeChatHyResponseModel();
+		String userId = (String) map.get("userId");
+		String workType = "0";
+		String otherLike = (String) map.get("otherLike");
+		Integer page = (Integer) map.get("page");
+		Integer pageSize = (Integer) map.get("pageSize");
 
+		if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(workType)) {
+			response.setCode("fail");
+			response.setMessage("必要参数为空");
+			return response;
+		}
+
+		if (page == null || pageSize == null) {
+			page = 1;
+			pageSize = 10;
+		}
+		otherLike = "".equals(otherLike) ? null : otherLike;
+
+		try {
+			response = wechatService.hyOrdersSelect(userId, workType, otherLike, null, page, pageSize);
+		} catch (Exception e) {
+			log.error(e);
+			response.setCode("fail");
+			response.setMessage("货运险订单查询失败");
+		}
+		return response;
+	}
+	
+	/**
+	 * 获取关联订单.
+	 * @param map
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(value = "/getRelationOrders", method = RequestMethod.POST)
 	@ResponseBody
 	public QueryOrderBaseBean getRelationOrders(@RequestBody ModelMap map, @HeaderParam("token") String token) {

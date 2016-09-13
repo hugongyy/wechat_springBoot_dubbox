@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +29,7 @@ import com.chetong.ctwechat.service.PushMessageService;
 @Service("pushMessageService")
 public class PushMessageServiceImpl implements PushMessageService {
 	private Log log = LogFactory.getLog(WechatServiceImpl.class);
-	@Autowired
+	@Resource
 	private CommExeSqlDAO commExeSqlDAO;
 
 	@Value("${WE_CHAT_PUSH_SWITCH}")

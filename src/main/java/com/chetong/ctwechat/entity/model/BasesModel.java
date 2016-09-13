@@ -5,6 +5,7 @@ public class BasesModel {
 	private String message;
 	private Integer page;
 	private Integer pageSize;
+	private Integer totalCount;
 	private String keyWords; // 搜索关键字
 	private String orderUrl; // 转到H5的链接.
 
@@ -56,4 +57,11 @@ public class BasesModel {
 		this.orderUrl = orderUrl;
 	}
 
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
 }
