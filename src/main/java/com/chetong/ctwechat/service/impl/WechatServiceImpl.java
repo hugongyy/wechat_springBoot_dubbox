@@ -793,6 +793,8 @@ public class WechatServiceImpl implements WechatService {
 
 		}
 
+		String dealStatLabel = null;
+		String dstat = null;
 		// 处理数据.
 		for (Map<String, Object> hyOrder : list) {
 			transportType = (String) hyOrder.get("transportType");
@@ -804,6 +806,37 @@ public class WechatServiceImpl implements WechatService {
 			sendTime = (Date) hyOrder.get("sendTime");
 			diffTimeLabel = DateUtil.diffTimeToString(now, sendTime);
 			hyOrder.put("diffTimeLabel", diffTimeLabel);
+			
+			dealStatLabel = null;
+			dstat = (String) hyOrder.get("dealStat");
+			if (dstat != null) {
+				if ("00".equals(dstat)) {
+					dealStatLabel = "派单中";
+				} else if ("01".equals(dstat)) {
+					dealStatLabel = "无响应";
+				} else if ("02".equals(dstat)) {
+					dealStatLabel = "注销";
+				} else if ("03".equals(dstat)) {
+					dealStatLabel = "撤单";
+				} else if ("04".equals(dstat)) {
+					dealStatLabel = "作业中";
+				} else if ("05".equals(dstat)) {
+					dealStatLabel = "待初审";
+				} else if ("06".equals(dstat)) {
+					dealStatLabel = "初审退回";
+				} else if ("07".equals(dstat)) {
+					dealStatLabel = "待审核";
+				} else if ("08".equals(dstat)) {
+					dealStatLabel = "已退回";
+				} else if ("09".equals(dstat)) {
+					dealStatLabel = "审核通过";
+				} else if ("10".equals(dstat)) {
+					dealStatLabel = "订单删除";
+				} else {
+					dealStatLabel = "未知";
+				}
+				hyOrder.put("dealStatLabel", dealStatLabel);
+			}
 		}
 
 		response.setList(list);
@@ -906,5 +939,7 @@ public class WechatServiceImpl implements WechatService {
 
 		return response;
 	}
+
+	
 
 }

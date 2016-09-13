@@ -268,7 +268,13 @@ public class WechatController {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * 获取关联订单.
+	 * @param map
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping(value = "/getRelationOrders", method = RequestMethod.POST)
 	@ResponseBody
 	public QueryOrderBaseBean getRelationOrders(@RequestBody ModelMap map, @HeaderParam("token") String token) {
