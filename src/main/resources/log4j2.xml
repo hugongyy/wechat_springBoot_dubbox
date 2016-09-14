@@ -6,8 +6,8 @@
 		<property name="error_file">/log/ctweb_85/ctweb-error.log</property>
 		<property name="all_file">/log/ctweb_85/ctweb-all.log</property>
 		<!-- Email配置 -->
-		<property name="to">wufeng@chetong.net</property>
-        <property name="from">wufeng@chetong.net</property>
+		<property name="to">jiangyf@chetong.net</property>
+        <property name="from">jiangyf@chetong.net</property>
         <property name="smtpHost">smtp.exmail.qq.com</property>
         <property name="smtpPort">25</property>
         <property name="smtpProtocol">smtp</property>

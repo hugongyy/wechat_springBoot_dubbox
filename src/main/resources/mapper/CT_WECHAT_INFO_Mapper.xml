@@ -255,10 +255,17 @@
 			
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
@@ -305,10 +312,17 @@
 			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
@@ -378,10 +392,17 @@
 			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
