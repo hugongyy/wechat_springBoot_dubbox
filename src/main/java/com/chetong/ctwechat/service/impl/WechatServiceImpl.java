@@ -115,6 +115,8 @@ public class WechatServiceImpl implements WechatService {
 
 			commExeSqlDAO.insertVO("ct_bind_info_MAPPER.insertSelective", bindInfo);
 
+			
+			response.setCtUser(list.get(0));
 			response.setCode("success");
 			response.setMessage("绑定成功");
 			return response;
