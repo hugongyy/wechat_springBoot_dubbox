@@ -67,8 +67,8 @@
 	<!-- 车险 -->
 	<sql id="queryCountMap">
 	    SELECT o1.state as state ,count(1) as sumCount FROM (SELECT	o.*,(CASE
-		WHEN(o.deal_stat = '04' AND o.order_type = 0 AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11)THEN	'20'
-		WHEN(o.deal_stat = '04' AND o.order_type in (1,2,3) AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)THEN	'20'
+		WHEN(o.deal_stat = '04' AND o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11) THEN '20'
+		WHEN(o.deal_stat = '04' AND o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23) THEN '20'
 		ELSE	o.deal_stat 
 		END )state
 		FROM	fm_order o
@@ -261,12 +261,12 @@
 			<choose>
 			    <when test='dealStat == "20"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <when test='dealStat == "04"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <otherwise>
@@ -318,12 +318,12 @@
 			<choose>
 			    <when test='dealStat == "20"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <when test='dealStat == "04"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <otherwise>
@@ -398,12 +398,12 @@
 			<choose>
 			    <when test='dealStat == "20"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <when test='dealStat == "04"'>
 			    	<![CDATA[
-					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					AND ((o.subject_id = '0' AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 11) OR (o.subject_id in ('1','2','3') AND TIMESTAMPDIFF(HOUR, o.send_time, now()) <= 23)) AND o.deal_stat = '04'
 					]]>
 			    </when>
 			    <otherwise>
@@ -598,8 +598,8 @@
 		where o.service_id = 1
 		and o.import_type = '0'
 		and o.deal_stat = '04'
-		and ( (o.order_type = '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 11 and 12) 
-			or  (o.order_type != '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 23 and 24) )
+		and ( (o.subject_id = '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 11 and 12) 
+			or  (o.subject_id in ('1','2','3') and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 23 and 24) )
 		and (b.bind_id is not null OR b2.bind_id is not null)
 	</select>
 	
