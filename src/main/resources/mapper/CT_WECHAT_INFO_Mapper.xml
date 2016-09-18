@@ -21,6 +21,7 @@
 		AND pg.ext1 = 5
 		LEFT JOIN ct_user u ON u.id = pg.user_id
 		WHERE u.id = #{userId}
+		limit 1
 		<!-- 715 -->
 	</select>
 	
@@ -48,6 +49,7 @@
 		<where>
 			u.id = #{userId}
 		</where>
+		limit 1
 	</select>
 	
 	<select id="querySubUserIdByCompanyUserId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -68,14 +70,16 @@
 		WHEN(o.deal_stat = '04' AND o.order_type = 0 AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11)THEN	'20'
 		WHEN(o.deal_stat = '04' AND o.order_type in (1,2,3) AND TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23)THEN	'20'
 		ELSE	o.deal_stat 
-		END )state 
-		FROM	fm_order o	    
+		END )state
+		FROM	fm_order o
+		LEFT JOIN fm_task_order_work_relation r ON o.order_no = r.order_no
 	</sql>
 	
 	<sql id="queryCountWhereOtherLike">
     	AND o.service_id = 1
     	AND o.import_type = '0'
 		AND o.is_simple = '0'
+		AND r.task_id IS NULL
     	<if test="otherLike!=null">
 		 	AND ( o.car_no like CONCAT('%',#{otherLike},'%')
 			OR o.case_no like CONCAT('%',#{otherLike},'%')
@@ -244,6 +248,7 @@
 			u.mobile AS sellerUserType
 		FROM fm_order o
 		LEFT JOIN ct_user u on o.seller_user_id = u.id 
+		LEFT JOIN fm_task_order_work_relation r ON o.order_no = r.order_no
 	</sql>
 	
 	<select id="queryOrderList4Company" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
@@ -255,10 +260,17 @@
 			
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
@@ -305,10 +317,17 @@
 			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
@@ -378,10 +397,17 @@
 			<if test="dealStat != null">
 			<choose>
 			    <when test='dealStat == "20"'>
-			        AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) > 11 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) > 23 END ) AND o.deal_stat = '04'
+					]]>
+			    </when>
+			    <when test='dealStat == "04"'>
+			    	<![CDATA[
+					AND ( CASE WHEN o.order_type = '0' THEN TIMESTAMPDIFF(HOUR, o.send_time, now()) < 12 ELSE TIMESTAMPDIFF(HOUR, o.send_time, now()) < 24 END ) AND o.deal_stat = '04'
+					]]>
 			    </when>
 			    <otherwise>
-					AND o.deal_stat = #{dealStat}        
+					AND o.deal_stat = #{dealStat}
 			    </otherwise>
 			</choose>
 			</if>
@@ -533,6 +559,7 @@
 		t.task_id = ti.id 
 		AND t.order_no = #{orderNo} 
 		AND ti.source = '1'
+		limit 1
 	</select>
 	
 	<select id="autoSendOverTimeOrder2SellerAndOrg" resultType="com.chetong.ctwechat.entity.mapping.FmOrder" parameterType ="java.util.Map">
