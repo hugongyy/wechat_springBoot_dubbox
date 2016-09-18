@@ -21,6 +21,7 @@
 		AND pg.ext1 = 5
 		LEFT JOIN ct_user u ON u.id = pg.user_id
 		WHERE u.id = #{userId}
+		limit 1
 		<!-- 715 -->
 	</select>
 	
@@ -48,6 +49,7 @@
 		<where>
 			u.id = #{userId}
 		</where>
+		limit 1
 	</select>
 	
 	<select id="querySubUserIdByCompanyUserId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -557,6 +559,7 @@
 		t.task_id = ti.id 
 		AND t.order_no = #{orderNo} 
 		AND ti.source = '1'
+		limit 1
 	</select>
 	
 	<select id="autoSendOverTimeOrder2SellerAndOrg" resultType="com.chetong.ctwechat.entity.mapping.FmOrder" parameterType ="java.util.Map">
