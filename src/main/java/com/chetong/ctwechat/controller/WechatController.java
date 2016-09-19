@@ -1,6 +1,7 @@
 package com.chetong.ctwechat.controller;
 
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.PathParam;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -270,6 +271,34 @@ public class WechatController {
 	}
 	
 	/**
+	 * 获取 access_token
+	 */
+	@RequestMapping(value = "/getAccessToken", method = RequestMethod.GET)
+	@ResponseBody
+	public WeChatResponseModel getAccessToken() {
+		return this.wechatService.getAccessToken();
+	};
+	
+	/**
+	 * @return 获取OPENID
+	 */
+	@RequestMapping(value = "/getOpenId/{code}", method = RequestMethod.GET)
+	@ResponseBody
+	public String getOpenId(@PathParam("code") String code) {
+		return this.wechatService.getOpenId(code);
+	}
+	
+	/**
+	 * @param openId
+	 * @return 根据openId 获取用户
+	 */
+	@RequestMapping(value = "/getUserInfoByOpenId/{openId}", method = RequestMethod.GET)
+	@ResponseBody
+	public WeChatResponseModel getUserInfoByOpenId(@PathParam("openId") String openId) {
+		return this.wechatService.getUserInfoByOpenId(openId);
+	};
+	
+	/**
 	 * 获取关联订单.
 	 * @param map
 	 * @param token
@@ -312,5 +341,6 @@ public class WechatController {
 	public void autoSendOverTimeOrder2SellerAndOrg() {
 		pushMessageService.autoSendOverTimeOrder2SellerAndOrg();
 	}
+
 	
 }

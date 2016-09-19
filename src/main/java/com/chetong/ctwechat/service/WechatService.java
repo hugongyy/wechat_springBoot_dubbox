@@ -22,4 +22,10 @@ public interface WechatService {
 
 	WeChatResponseModel unbindingOpenId(String uname, String pwd, String openId);
 
+	String getOpenId(String code);
+
+	WeChatResponseModel getUserInfoByOpenId(String openId);
+
+	WeChatResponseModel getAccessToken();
+
 }
