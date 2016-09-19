@@ -72,14 +72,13 @@
 		ELSE	o.deal_stat 
 		END )state
 		FROM	fm_order o
-		LEFT JOIN fm_task_order_work_relation r ON o.order_no = r.order_no
 	</sql>
 	
 	<sql id="queryCountWhereOtherLike">
     	AND o.service_id = 1
     	AND o.import_type = '0'
 		AND o.is_simple = '0'
-		AND r.task_id IS NULL
+		AND NOT EXISTS ( SELECT 1 FROM fm_task_info t WHERE t.report_no = o.case_no AND t.source = '1')
     	<if test="otherLike!=null">
 		 	AND ( o.car_no like CONCAT('%',#{otherLike},'%')
 			OR o.case_no like CONCAT('%',#{otherLike},'%')
@@ -248,7 +247,6 @@
 			u.mobile AS sellerUserType
 		FROM fm_order o
 		LEFT JOIN ct_user u on o.seller_user_id = u.id 
-		LEFT JOIN fm_task_order_work_relation r ON o.order_no = r.order_no
 	</sql>
 	
 	<select id="queryOrderList4Company" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
