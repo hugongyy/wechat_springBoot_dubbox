@@ -9,6 +9,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,6 +59,11 @@ public class WechatServiceImpl implements WechatService {
 
 	@Resource
 	private CommExeSqlDAO commExeSqlDAO;
+	
+	@Value("${appid}")
+	private String appid;
+	@Value("${appsecret}")
+	private String appsecret;
 
 	/**
 	 * 绑定
@@ -850,6 +859,57 @@ public class WechatServiceImpl implements WechatService {
 
 		return response;
 	}
+	
+	@Override
+	public WeChatResponseModel getAccessToken() {
+		WeChatResponseModel response = new WeChatResponseModel();
+		if (TokenThread.access == null || "".equals(TokenThread.access)) {
+			response.setCode("fail");
+			response.setMessage("参数为空,获取失败");
+			return response;
+		} else {
+			response.setCode("success");
+			response.setMessage(TokenThread.access);
+			return response;
+		}
+	}
+	
+	@Override
+	public String getOpenId(String code) {
+		String openIdInfo = getHttps(appid, appsecret, code);
+		return openIdInfo;
+	}
+	
+	@Override
+	public WeChatResponseModel getUserInfoByOpenId(String openId) {
+		WeChatResponseModel response = new WeChatResponseModel();
+		try {
+			if (openId == null || "".equals(openId)) {
+				response.setCode("fail");
+				response.setMessage("openid传入值为空");
+				return response;
+			} else {
+				Map<String, Object> paraMap = new HashMap<String, Object>();
+				paraMap.put("weichatid", openId);
+				CtUser cu = (CtUser) commExeSqlDAO.queryForObject("ct_bind_info_MAPPER.getBindInfo", paraMap);
+				if (cu == null) {
+					response.setCode("fail");
+					response.setMessage("账号不存在,请重新输入");
+					return response;
+				} else {
+					cu.setLoginPwd(null);
+					response.setCode("success");
+					response.setCtUser(cu);
+					return response;
+				}
+			}
+
+		} catch (Exception e) {
+			response.setCode("fail");
+			response.setMessage("查询失败");
+			return response;
+		}
+	}
 
 	/**
 	 * 获取关联订单,排除了医健险的订单.
@@ -942,6 +1002,23 @@ public class WechatServiceImpl implements WechatService {
 		return response;
 	}
 
-	
+	public String getHttps(String appid, String secret, String code) {
+		String bytestr = "";
+		HttpClient httpClient = new HttpClient();
+		String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code
+				+ "&grant_type=authorization_code";
+		GetMethod method = new GetMethod(url);
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+		try {
+			httpClient.executeMethod(method);
+			byte[] bytes = method.getResponseBody();
+			bytestr = new String(bytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			method.releaseConnection();
+		}
+		return bytestr;
+	}	
 
 }
