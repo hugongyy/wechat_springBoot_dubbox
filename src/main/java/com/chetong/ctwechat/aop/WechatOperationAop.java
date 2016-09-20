@@ -28,7 +28,9 @@ public class WechatOperationAop {
 		Object[] args = point.getArgs();
 		// 从参数列表中获取参数对象
 		for (Object obj : args) {// 查看参数值
-			log.info("*********** " + obj.toString());
+			if (obj != null) {
+				log.info("*********** " + obj.toString());	
+			}
 		}
 		Object object = point.proceed();
 		return object;
