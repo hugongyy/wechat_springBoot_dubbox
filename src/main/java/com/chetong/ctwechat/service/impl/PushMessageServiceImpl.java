@@ -94,18 +94,19 @@ public class PushMessageServiceImpl implements PushMessageService {
 			
 			
 			// 组合内容
-			content.append("超时订单提醒\n\n超时订单 <a href='" + headerUrl + "wechat/#/order/info?no=")
-			.append(order.getOrderNo())
-			.append("&id=").append(order.getId())
-			.append("&openid=").append(orgWechatId).append("'>")
+//			content.append("超时订单提醒\n\n超时订单 <a href='" + headerUrl + "wechat/#/order/info?no=")
+//			.append(order.getOrderNo())
+//			.append("&id=").append(order.getId())
+//			.append("&openid=").append(orgWechatId).append("'>")
+			content.append("超时订单提醒\n\n超时订单")
 			.append("\n订单号:").append(order.getOrderNo())
 			.append("\n报案号:").append(order.getCaseNo())
 			.append("\n车童:").append(order.getSellerUserName())
 			.append("\n联系方式:").append(order.getSellerUserType())
 			.append("\n委托方:").append(order.getBuyerUserName())
 			.append("\n订单类型:").append(order.getOrderTypeLabel())
-			.append("\n派单时间:").append(order.getSendTimeLabel())
-			.append("</a>");	
+			.append("\n派单时间:").append(order.getSendTimeLabel());
+//			.append("</a>");	
 			
 			try {
 				if (StringUtils.isNotEmpty(sellerWechatId)) {
