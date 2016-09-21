@@ -317,8 +317,9 @@ public class WechatServiceImpl implements WechatService {
 				map.put(mapOrder.get(i).getState(), mapOrder.get(i).getSumCount());
 			}
 			response.setCount(map);
+			u.setDepartment(userTypeLabel);
 			response.setCtUser(u);
-			response.setMessage("userTypeLabel=" + userTypeLabel);
+			response.setMessage("统计车险各个状态订单数成功");
 			return response;
 		}
 
@@ -448,8 +449,9 @@ public class WechatServiceImpl implements WechatService {
 				map.put(mapOrder.get(i).getState(), mapOrder.get(i).getSumCount());
 			}
 			response.setCount(map);
+			u.setDepartment(userTypeLabel);
 			response.setCtUser(u);
-			response.setMessage("userTypeLabel=" + userTypeLabel);
+			response.setMessage("统计货运险各个状态订单数成功");
 			return response;
 		}
 	}
@@ -617,10 +619,11 @@ public class WechatServiceImpl implements WechatService {
 
 		response.setList(list);
 		response.setTotalCount(list.getPaginator().getTotalCount());
+		u.setDepartment(userTypeLabel);
 		response.setCtUser(u);
 		response.setPage(page);
 		response.setCode("success");
-		response.setMessage("userTypeLabel=" + userTypeLabel);
+		response.setMessage("查询车险订单列表成功");
 
 		return response;
 	}
@@ -843,10 +846,11 @@ public class WechatServiceImpl implements WechatService {
 
 		response.setList(list);
 		response.setTotalCount(list.getPaginator().getTotalCount());
+		u.setDepartment(userTypeLabel);
 		response.setCtUser(u);
 		response.setPage(page);
 		response.setCode("success");
-		response.setMessage("userTypeLabel=" + userTypeLabel);
+		response.setMessage("查询货运险订单列表成功");
 
 		return response;
 	}
