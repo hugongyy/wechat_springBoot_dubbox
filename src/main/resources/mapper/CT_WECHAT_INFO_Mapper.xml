@@ -221,6 +221,7 @@
 					    #{uId}
 					</foreach>
 			</where>
+		GROUP BY o.deal_stat
 	</select>
 	
 	<sql id="queryOrderListMap">
