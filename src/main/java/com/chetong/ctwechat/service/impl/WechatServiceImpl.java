@@ -512,9 +512,6 @@ public class WechatServiceImpl implements WechatService {
 			param.put("dealStat", dealStat);
 			param.put("workType", workType);
 
-			// param.put("startRecord", startRecord);
-			// param.put("pageSize", pageSize);
-
 			// 分页查询
 			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Org", param, pageBounds);
 
@@ -534,7 +531,7 @@ public class WechatServiceImpl implements WechatService {
 					param.put("cityCode", cityCode);
 				} else {
 					param.put("provCode", provCode);
-					param.put("cityCode", cityCode);
+					param.put("spAreas", spAreas);
 				}
 				if (u.getPid() != null) { // 子账户的权限,及地区和报案号规则
 					if (u.getMailAddress() != null) {
@@ -544,8 +541,6 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				// param.put("startRecord", startRecord);
-				// param.put("pageSize", pageSize);
 				// 分页查询
 				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Org", param, pageBounds);
 
@@ -565,7 +560,7 @@ public class WechatServiceImpl implements WechatService {
 				param.put("userIdArr", userIdArr);
 				param.put("otherLike", otherLike);
 				param.put("dealStat", dealStat);
-				param.put("workType", workType);
+//				param.put("workType", workType); // 保险公司不分本异地订单.
 
 				if (u.getPid() != null) { // 子账户的权限,及地区和报案号规则
 					if (u.getMailAddress() != null) {
@@ -575,8 +570,6 @@ public class WechatServiceImpl implements WechatService {
 						param.put("likeCaseNos", u.getBankNo().split(","));
 					}
 				}
-				// param.put("startRecord", startRecord);
-				// param.put("pageSize", pageSize);
 				// 分页查询
 				list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Company", param, pageBounds);
 
@@ -596,7 +589,7 @@ public class WechatServiceImpl implements WechatService {
 			param.put("userIdArr", userIdArr);
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
-			param.put("workType", workType);
+//			param.put("workType", workType); // 团队不分本异地订单.
 			// param.put("startRecord", startRecord);
 			// param.put("pageSize", pageSize);
 			// 查询
@@ -609,10 +602,8 @@ public class WechatServiceImpl implements WechatService {
 			param.put("userIdArr", userIdArr);
 			param.put("otherLike", otherLike);
 			param.put("dealStat", dealStat);
-			param.put("workType", workType);
+//			param.put("workType", workType); // 车童不分本异地订单.
 
-			// param.put("startRecord", startRecord);
-			// param.put("pageSize", pageSize);
 			// 查询
 			list = commExeSqlDAO.queryForPage("CT_WECHAT_INFO.queryOrderList4Seller", param, pageBounds);
 		}
