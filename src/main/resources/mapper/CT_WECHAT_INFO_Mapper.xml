@@ -300,11 +300,7 @@
 			<include refid="queryCountWhereOtherLike"/>
 			<include refid="queryOrderListWhereRules"/>
 		</where>
-		
-		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			
-		</if>
 	</select>
 	
 	<select id="queryOrderList4Org" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
@@ -381,10 +377,7 @@
 			<include refid="queryCountWhereOtherLike"/>
 			<include refid="queryOrderListWhereRules"/>
 		</where>
-		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			
-		</if>
 	</select>
 	
 	<select id="queryOrderList4Seller" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
@@ -431,10 +424,7 @@
 			</foreach>
 			<include refid="queryCountWhereOtherLike"/>
 		</where>
-		<if test="startRecord != null">
 		    ORDER BY o.send_time DESC
-			
-		</if>
 	</select>
 		<!-- 货运险 -->
 	<sql id="queryHyOrderListMap">
@@ -609,7 +599,9 @@
 		<![CDATA[
 		AND o.send_num < 3
 		]]>
-		AND b.bind_id IS NOT NULL ORDER BY o.send_flag, o.id DESC
+		AND b.bind_id IS NOT NULL 
+		GROUP BY b.bind_id, o.msg_content
+		ORDER BY o.send_flag, o.id DESC
 	</select>
 
 	<!-- 微信管理端的查询 end -->
