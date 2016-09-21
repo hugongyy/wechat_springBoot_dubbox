@@ -1,7 +1,8 @@
 package com.chetong.ctwechat.controller;
 
+import java.net.URLDecoder;
+
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PathParam;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -153,7 +154,7 @@ public class WechatController {
 		otherLike = "".equals(otherLike) ? null : otherLike;
 
 		try {
-			response = wechatService.cxOrdersSelect(userId, workType, otherLike, orderState, page, pageSize);
+			response = wechatService.cxOrdersSelect(userId, workType, null, orderState, page, pageSize);
 		} catch (Exception e) {
 			log.error(e);
 			response.setCode("fail");
@@ -185,6 +186,11 @@ public class WechatController {
 			pageSize = 10;
 		}
 		otherLike = "".equals(otherLike) ? null : otherLike;
+		try {
+			otherLike = URLDecoder.decode(otherLike, "UTF-8");	
+		} catch (Exception e) {
+			log.error("URLDecoder.decode(otherLike, \"UTF-8\") error, otherLike="+otherLike,e);
+		}
 
 		try {
 			response = wechatService.cxOrdersSelect(userId, null, otherLike, null, page, pageSize);
@@ -225,7 +231,7 @@ public class WechatController {
 		otherLike = "".equals(otherLike) ? null : otherLike;
 
 		try {
-			response = wechatService.hyOrdersSelect(userId, workType, otherLike, orderState, page, pageSize);
+			response = wechatService.hyOrdersSelect(userId, workType, null, orderState, page, pageSize);
 		} catch (Exception e) {
 			log.error(e);
 			response.setCode("fail");
@@ -260,6 +266,12 @@ public class WechatController {
 			pageSize = 10;
 		}
 		otherLike = "".equals(otherLike) ? null : otherLike;
+		
+		try {
+			otherLike = URLDecoder.decode(otherLike, "UTF-8");	
+		} catch (Exception e) {
+			log.error("URLDecoder.decode(otherLike, \"UTF-8\") error, otherLike="+otherLike,e);
+		}
 
 		try {
 			response = wechatService.hyOrdersSelect(userId, workType, otherLike, null, page, pageSize);

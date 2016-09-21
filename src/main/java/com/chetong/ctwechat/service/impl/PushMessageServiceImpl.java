@@ -108,6 +108,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 			.append("\n派单时间:").append(order.getSendTimeLabel());
 //			.append("</a>");	
 			
+//			result = {"errcode":0,"errmsg":"ok"};
 			try {
 				if (StringUtils.isNotEmpty(sellerWechatId)) {
 					result = sendTextMessageToUser(content.toString(), sellerWechatId, TokenThread.access);
@@ -116,14 +117,17 @@ public class PushMessageServiceImpl implements PushMessageService {
 					cob.setMsgType("1");
 					cob.setMsgTo(sellerWechatId);
 					cob.setMsgContent(content.toString());
-					cob.setSendFlag(result);
 					cob.setSendTime(now);
 					cob.setSendNum(1);
 					cob.setCreateBy("0");
 					cob.setCreateTime(now);
+					if ("{\"errcode\":0,\"errmsg\":\"ok\"}".equals(result)) {
+						cob.setSendFlag("1");
+					} else {
+						cob.setSendFlag(result);
+					}
 
 					commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
-
 				}
 			} catch (Exception e) {
 				log.error(e);
@@ -136,11 +140,16 @@ public class PushMessageServiceImpl implements PushMessageService {
 					cob.setMsgType("1");
 					cob.setMsgTo(orgWechatId);
 					cob.setMsgContent(content.toString());
-					cob.setSendFlag(result);
 					cob.setSendTime(now);
 					cob.setSendNum(1);
 					cob.setCreateBy("0");
 					cob.setCreateTime(now);
+					
+					if ("{\"errcode\":0,\"errmsg\":\"ok\"}".equals(result)) {
+						cob.setSendFlag("1");
+					} else {
+						cob.setSendFlag(result);
+					}
 
 					commExeSqlDAO.insertVO("cms_out_box.insertNotNull", cob);
 				}
@@ -170,14 +179,18 @@ public class PushMessageServiceImpl implements PushMessageService {
 				openid = o.getMsgTo();
 				content = o.getMsgContent();
 				result = sendTextMessageToUser(content, openid, TokenThread.access);
-				if (!"0".equals(result)) { // 没有发送
-					o.setMsgTo(openid);
+				
+				o.setMsgTo(openid);				
+				o.setSendTime(now);
+				o.setSendNum(o.getSendNum() + 1);
+				
+				if ("{\"errcode\":0,\"errmsg\":\"ok\"}".equals(result)) {
+					o.setSendFlag("1");
+				} else { // 没有发送
 					o.setSendFlag(result);
-					o.setSendTime(now);
-					o.setSendNum(o.getSendNum() + 1);
-
-					commExeSqlDAO.insertVO("cms_out_box.updateByKeyNotNull", o);
 				}
+				commExeSqlDAO.updateVO("cms_out_box.updateByKeyNotNull", o);
+				Thread.sleep(1000);
 			}
 		} catch (Exception e) {
 			log.error(e);
