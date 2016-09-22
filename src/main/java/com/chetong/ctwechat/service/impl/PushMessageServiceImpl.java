@@ -98,7 +98,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 //			.append(order.getOrderNo())
 //			.append("&id=").append(order.getId())
 //			.append("&openid=").append(orgWechatId).append("'>")
-			content.append("超时订单提醒\n\n超时订单")
+			content.append("超时订单提醒\n\n即将超时")
 			.append("\n订单号:").append(order.getOrderNo())
 			.append("\n报案号:").append(order.getCaseNo())
 			.append("\n车童:").append(order.getSellerUserName())
@@ -156,6 +156,12 @@ public class PushMessageServiceImpl implements PushMessageService {
 			} catch (Exception e) {
 				log.error(e);
 			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				log.error(e);
+			}
 		}
 	}
 
@@ -171,19 +177,18 @@ public class PushMessageServiceImpl implements PushMessageService {
 		Date now = new Date();
 		CmsOutBox cob = new CmsOutBox();
 
-		try {
+		List<CmsOutBox> cobList = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryAllHaveNotSendOutMsg", cob);
 
-			List<CmsOutBox> cobList = commExeSqlDAO.queryForList("CT_WECHAT_INFO.queryAllHaveNotSendOutMsg", cob);
-
-			for (CmsOutBox o : cobList) {
-				openid = o.getMsgTo();
-				content = o.getMsgContent();
+		for (CmsOutBox o : cobList) {
+			openid = o.getMsgTo();
+			content = o.getMsgContent();
+			try {
 				result = sendTextMessageToUser(content, openid, TokenThread.access);
-				
-				o.setMsgTo(openid);				
+
+				o.setMsgTo(openid);
 				o.setSendTime(now);
 				o.setSendNum(o.getSendNum() + 1);
-				
+
 				if ("{\"errcode\":0,\"errmsg\":\"ok\"}".equals(result)) {
 					o.setSendFlag("1");
 				} else { // 没有发送
@@ -191,9 +196,9 @@ public class PushMessageServiceImpl implements PushMessageService {
 				}
 				commExeSqlDAO.updateVO("cms_out_box.updateByKeyNotNull", o);
 				Thread.sleep(1000);
+			} catch (Exception e) {
+				log.error(e);
 			}
-		} catch (Exception e) {
-			log.error(e);
 		}
 	}
 

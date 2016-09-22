@@ -128,21 +128,23 @@
 	    <include refid="queryCountMap"/>
 	    	<where>
 				AND (o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '2' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
-					OR o.send_id = #{userId})
-				<include refid="queryCountWhereOtherLike"/>
-				<include refid="queryOrderListWhereRules"/>
+					OR o.send_id = #{userId}				
 				<choose>		
 				<when test="provCode != null">
-					AND o.ext1 = #{provCode}
+					OR ( o.ext1 = #{provCode}
 					AND o.ext2 NOT IN 
 					<foreach collection="spAreas" item="cCode" open="(" separator="," close=")">
 					    #{cCode}
 					</foreach>
+					)
 				</when>
 				<when test="cityCode != null">
-				    AND o.ext2 = #{cityCode}
+				    OR o.ext2 = #{cityCode}
 				</when>
-				</choose>				
+				</choose>
+				)
+				<include refid="queryCountWhereOtherLike"/>
+				<include refid="queryOrderListWhereRules"/>				
 			</where>
 				) o1
 			GROUP BY state	    
