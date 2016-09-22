@@ -43,7 +43,7 @@ public class WechatController {
 		try {
 			response = wechatService.bindingopenId(uname, pwd, openId);
 		} catch (Exception e) {
-			log.error(e);
+			log.error("绑定openId失败",e);			
 			response.setCode("fail");
 			response.setMessage("绑定openId失败");
 		}
@@ -69,7 +69,7 @@ public class WechatController {
 		try {
 			response = wechatService.unbindingOpenId(uname, pwd, openId);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("解除绑定openId失败");
 		}
@@ -93,9 +93,9 @@ public class WechatController {
 		otherLike = "".equals(otherLike) ? null : otherLike;
 
 		try {
-			response = wechatService.cxOrdersStatisticsNum(userId, otherLike);
+			response = wechatService.cxOrdersStatisticsNum(userId, null);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("统计车险订单状态失败");
 		}
@@ -118,9 +118,9 @@ public class WechatController {
 
 		otherLike = "".equals(otherLike) ? null : otherLike;
 		try {
-			response = wechatService.hyOrdersStatisticsNum(userId, otherLike);
+			response = wechatService.hyOrdersStatisticsNum(userId, null);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("统计货运险订单状态失败");
 		}
@@ -156,7 +156,7 @@ public class WechatController {
 		try {
 			response = wechatService.cxOrdersSelect(userId, workType, null, orderState, page, pageSize);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("车险订单查询失败");
 		}
@@ -195,7 +195,7 @@ public class WechatController {
 		try {
 			response = wechatService.cxOrdersSelect(userId, null, otherLike, null, page, pageSize);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("车险订单查询失败");
 		}
@@ -233,7 +233,7 @@ public class WechatController {
 		try {
 			response = wechatService.hyOrdersSelect(userId, workType, null, orderState, page, pageSize);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("货运险订单查询失败");
 		}
@@ -276,7 +276,7 @@ public class WechatController {
 		try {
 			response = wechatService.hyOrdersSelect(userId, workType, otherLike, null, page, pageSize);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("货运险订单查询失败");
 		}
@@ -332,7 +332,7 @@ public class WechatController {
 		try {
 			response = wechatService.getRelationOrders(Long.parseLong(userId), caseNo, token);
 		} catch (Exception e) {
-			log.error(e);
+			log.error(response.getMessage(), e);
 			response.setCode("fail");
 			response.setMessage("获取关联订单列表失败");
 		}

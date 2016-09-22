@@ -89,7 +89,7 @@ public class WechatServiceImpl implements WechatService {
 		paramMap.put("weichatid", openId);
 		List<CtUser> uList = commExeSqlDAO.queryForList("ct_bind_info_MAPPER.getBindInfo", paramMap);
 
-		if (list == null) {
+		if (list == null || list.size() == 0) {
 			response.setCode("fail");
 			response.setMessage("账号不存在,请重新输入");
 			return response;
