@@ -32,7 +32,7 @@ mybatis:
 headerUrl: http://qa.chetong.net/
 
 appid: wx8eda4c135b1ad9f7
-appsecret: 7a6d09c0f8a25118f109785d942f09f1
-WE_CHAT_PUSH_SWITCH: Y
+appsecret: 7a6d09c0f8a25118f109785d942f09f1__________ # 不要影响测试环境的获取access_token
+WE_CHAT_PUSH_SWITCH: N
 zookeeper.address: 10.249.145.160:2181
 dubbo.group: release
