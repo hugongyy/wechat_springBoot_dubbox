@@ -606,6 +606,8 @@
 		GROUP BY b.bind_id, o.msg_content
 		ORDER BY o.send_flag, o.id DESC
 	</select>
+	
+
 
 	<!-- 微信管理端的查询 end -->
 </mapper>
