@@ -159,7 +159,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 			}
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				log.error(e);
 			}
@@ -196,7 +196,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 					o.setSendFlag(result);
 				}
 				commExeSqlDAO.updateVO("cms_out_box.updateByKeyNotNull", o);
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 			} catch (Exception e) {
 				log.error(e);
 			}
