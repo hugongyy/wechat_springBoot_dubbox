@@ -166,8 +166,8 @@ public class PushMessageServiceImpl implements PushMessageService {
 		}
 	}
 
-	// 每10分钟轮询一次,自动将外发消息箱中的非成功的消息推送到微信.(最多三次)
-	@Scheduled(fixedDelay = 10 * 60 * 1000)
+	// 每1分钟轮询一次,自动将外发消息箱中的非成功的消息推送到微信.(最多三次)
+	@Scheduled(fixedDelay = 1 * 60 * 1000)
 	public void autoSendAllOutMsg() {
 		if (!"Y".equals(WE_CHAT_PUSH_SWITCH)) {
 			return;
