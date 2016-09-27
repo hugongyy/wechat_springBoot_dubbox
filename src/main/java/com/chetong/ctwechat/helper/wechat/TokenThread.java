@@ -12,7 +12,7 @@ import com.chetong.ctwechat.entity.model.AccessTokenModel;
  * 定时获取微信access_token的线程
  * 
  */
-@Component
+@Component("tokenThread")
 public class TokenThread {
 	private static Logger log = LoggerFactory.getLogger(TokenThread.class);
 	// 第三方用户唯一凭证
