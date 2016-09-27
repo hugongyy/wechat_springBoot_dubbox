@@ -198,7 +198,7 @@
 				AND (o.buyer_user_id IN ( SELECT t.grant_id_c FROM ct_third_apply_info t WHERE t.`status` = '2' AND t.service_id = 1 AND t.grant_type = '1' AND (t.apply_id_a = #{userId} OR t.middle_id_b = #{userId}) )
 					OR o.send_user_id = #{userId})
 				<include refid="queryHyCountWhereOtherLike"/>
-				<choose>		
+				<!-- 货运险不查作业地 <choose>		
 				<when test="provCode != null">
 					AND o.prov_code = #{provCode}
 					AND o.city_code NOT IN 
@@ -209,7 +209,7 @@
 				<when test="cityCode != null">
 				    AND o.city_code = #{cityCode}
 				</when>
-				</choose>
+				</choose> -->
 			</where>
 		GROUP BY o.deal_stat
 	</select>

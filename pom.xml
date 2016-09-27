@@ -31,7 +31,7 @@
 
 	<properties>
 		<java.version>1.7</java.version>
-		<aic.version>0.0.9-qa</aic.version>
+		<aic.version>0.1.0-qa</aic.version>
 	</properties>
 
 	<dependencies>

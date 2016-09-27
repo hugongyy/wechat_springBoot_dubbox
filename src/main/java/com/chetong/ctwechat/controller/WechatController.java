@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
+import com.chetong.ctwechat.entity.model.BasesModel;
 import com.chetong.ctwechat.entity.model.QueryOrderBaseBean;
 import com.chetong.ctwechat.entity.model.WeChatHyResponseModel;
 import com.chetong.ctwechat.entity.model.WeChatResponseModel;
+import com.chetong.ctwechat.helper.wechat.TokenThread;
 import com.chetong.ctwechat.service.PushMessageService;
 import com.chetong.ctwechat.service.WechatService;
 
@@ -32,6 +34,8 @@ public class WechatController {
 	private WechatService wechatService;
 	@Autowired
 	private PushMessageService pushMessageService;
+	@Autowired
+	private TokenThread tokenThread;
 
 	@RequestMapping(value = "/bindingopenId", method = RequestMethod.POST)
 	@ResponseBody
@@ -162,6 +166,10 @@ public class WechatController {
 		}
 		return response;
 	}
+	
+	
+	 
+		
 	
 	/**
 	 * 车险订单查询（list）
@@ -355,5 +363,14 @@ public class WechatController {
 		pushMessageService.autoSendOverTimeOrder2SellerAndOrg();
 	}
 
-	
+
+	@RequestMapping(value = "/receiveAccessToken", method = RequestMethod.GET)
+	@ResponseBody
+	public BasesModel receiveAccessToken() {
+		BasesModel response = new BasesModel();
+		tokenThread.getAccess();
+		response.setCode("success");
+		response.setMessage("access_token = "+tokenThread.access);
+		return response;
+	}
 }
