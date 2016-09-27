@@ -31,6 +31,23 @@
 		 id,	bind_type,	user_id,	bind_id,	bind_no,	nickname,	head_pic,	create_id,	create_time
 	</sql>
 
+	<!-- 通过userId查询绑定的openid -->
+	<select id="queryCtBindInfo" resultType="com.chetong.ctwechat.entity.mapping.CtBindInfo" parameterType ="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+	SELECT b.id AS id, b.bind_type AS bindType, b.user_id AS userId, b.bind_id AS bindId, b.bind_no AS bindNo, b.nickname AS nikename, b.head_pic AS headPic, b.create_id AS createId, b.create_time AS createTime 
+	FROM ct_bind_info b WHERE b.user_id = #{userId}
+	</select>
+	
+	<select id="getNullCtBindInfo" resultType="com.chetong.ctwechat.entity.mapping.CtBindInfo" parameterType ="com.chetong.ctwechat.entity.mapping.CtBindInfo">
+	SELECT b.id AS id, b.bind_type AS bindType, b.user_id AS userId, b.bind_id AS bindId, b.bind_no AS bindNo, b.nickname AS nikename, b.head_pic AS headPic, b.create_id AS createId, b.create_time AS createTime 
+		FROM ct_bind_info b 
+		<where>
+		<if test="userId != null">
+			AND b.user_id = #{userId}
+		</if>
+			AND (b.nickname IS NULL OR b.nickname = '')
+		</where>
+	</select>
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultMap="ctBindInfoResultMap" parameterType="java.lang.Long">
 		 SELECT

@@ -28,4 +28,6 @@ public interface WechatService {
 
 	WeChatResponseModel getAccessToken();
 
+	String receiveUserInfo(String userId);
+
 }

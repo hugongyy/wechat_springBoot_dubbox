@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import com.chetong.ctwechat.dao.CommExeSqlDAO;
 import com.chetong.ctwechat.entity.mapping.CmsOutBox;
+import com.chetong.ctwechat.entity.mapping.CtBindInfo;
 import com.chetong.ctwechat.entity.mapping.FmOrder;
 import com.chetong.ctwechat.helper.wechat.TokenThread;
 import com.chetong.ctwechat.service.PushMessageService;
@@ -200,6 +201,20 @@ public class PushMessageServiceImpl implements PushMessageService {
 				log.error(e);
 			}
 		}
+	}
+	
+	@Override
+	public String testSendOutMsg(String content, String userId){
+		StringBuffer sb = new StringBuffer();
+		String result = null;
+		CtBindInfo param = new CtBindInfo();
+		param.setUserId(Long.parseLong(userId));
+		List<CtBindInfo> cbiList =  commExeSqlDAO.queryForList("ct_bind_info_MAPPER.queryCtBindInfo", param);
+		for(CtBindInfo cbi : cbiList) {
+			result = sendTextMessageToUser(content, cbi.getBindId(), TokenThread.access);
+			sb.append(",").append(result);
+		}
+		return sb.toString();
 	}
 
 	public String sendTextMessageToUser(String content, String openid, String accessToken) {
