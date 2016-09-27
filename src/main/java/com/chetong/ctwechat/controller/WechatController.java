@@ -373,4 +373,22 @@ public class WechatController {
 		response.setMessage("access_token = "+tokenThread.access);
 		return response;
 	}
+	
+	
+	
+	@RequestMapping(value = "/testSendOutMsg", method = RequestMethod.POST)
+	@ResponseBody
+	public String testSendOutMsg(@RequestBody ModelMap map) {
+		String userId = (String) map.get("userId");
+		String content = (String) map.get("content");
+		
+		return pushMessageService.testSendOutMsg(content, userId);
+	}
+	
+	@RequestMapping(value = "/receiveUserInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public String receiveUserInfo(@RequestBody ModelMap map) {
+		String userId = (String) map.get("userId");
+		return wechatService.receiveUserInfo(userId);
+	}
 }

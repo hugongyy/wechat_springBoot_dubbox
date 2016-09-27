@@ -1014,6 +1014,42 @@ public class WechatServiceImpl implements WechatService {
 			method.releaseConnection();
 		}
 		return bytestr;
+	}
+
+	@Override
+	public String receiveUserInfo(String userId) {
+		StringBuffer sb = new StringBuffer();
+		String result = null;
+		CtBindInfo param = new CtBindInfo();
+		if (userId != null) {
+			param.setUserId(Long.parseLong(userId));	
+		}
+		List<CtBindInfo> cbiList = commExeSqlDAO.queryForList("ct_bind_info_MAPPER.getNullCtBindInfo", param);
+		for(CtBindInfo cbi : cbiList) {
+			String openId = cbi.getBindId();
+			String accessToken = TokenThread.access;
+			String requestUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + accessToken + "&openid="
+					+ openId + "&lang=zh_CN";
+			JSONObject jsonObject = WeixinUtil.httpRequest(requestUrl, "GET", null);
+			if (!StringUtil.isNullOrEmpty(jsonObject.get("errcode"))) {
+				sb.append(",").append("errcode=").append(jsonObject.get("errcode"));
+				continue;
+			}
+			CtBindInfo bindInfo = new CtBindInfo();
+			bindInfo.setId(cbi.getId());
+			bindInfo.setNickname((String)jsonObject.get("nickname"));
+			bindInfo.setHeadPic((String) jsonObject.get("headimgurl"));
+			
+			commExeSqlDAO.updateVO("ct_bind_info_MAPPER.updateByPrimaryKeySelective", bindInfo);
+			sb.append(",").append("nickname="+bindInfo.getNickname());
+			
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return sb.toString();
 	}	
 
 }
