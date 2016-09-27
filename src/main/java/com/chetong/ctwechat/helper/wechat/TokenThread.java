@@ -27,7 +27,7 @@ public class TokenThread {
 	@Value("${appsecret}")
 	private String appsecret;
 
-	@Scheduled(fixedRate = 7100 * 1000)
+	@Scheduled(fixedRate = 10 * 60 * 1000)
 	// @Scheduled(fixedDelay = 7100 * 1000)
 	// @Scheduled(cron = "*/5 * * * * *")
 	public void getAccess() {
