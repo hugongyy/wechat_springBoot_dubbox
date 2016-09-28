@@ -34,5 +34,5 @@ headerUrl: http://beta.chetong.net/
 appid: wx7daf851ff9bac648
 appsecret: 9072255787f6a773122600fe058582ac__________ # 不要影响生产环境的获取access_token
 WE_CHAT_PUSH_SWITCH: N
-zookeeper.address: 10.249.145.160:2181
+zookeeper.address: 10.104.27.127:2181
 dubbo.group: beta
