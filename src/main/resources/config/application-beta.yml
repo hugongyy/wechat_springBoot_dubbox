@@ -4,9 +4,9 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://10.66.132.211:3306/valet_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
-        username: root
-        password: chetong@828
+        url: jdbc:mysql://10.66.110.255:3306/betadb?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
+        username: cdb_outerroot
+        password: CHEtong@828
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
         filters: stat,wall,log4j
@@ -29,10 +29,10 @@ mybatis:
   config-location: classpath:config/mybatis_config.xml
 
 ## 自定义配置
-headerUrl: http://dev.chetong.net/
+headerUrl: http://beta.chetong.net/
 
-appid: wx8eda4c135b1ad9f7
-appsecret: 7a6d09c0f8a25118f109785d942f09f1__________ # 不要影响测试环境的获取access_token
+appid: wx7daf851ff9bac648
+appsecret: 9072255787f6a773122600fe058582ac__________ # 不要影响生产环境的获取access_token
 WE_CHAT_PUSH_SWITCH: N
 zookeeper.address: 10.249.145.160:2181
-dubbo.group: develop
+dubbo.group: beta
