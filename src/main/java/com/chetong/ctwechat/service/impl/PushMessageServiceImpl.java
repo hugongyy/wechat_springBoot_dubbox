@@ -192,7 +192,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 
 				if ("{\"errcode\":0,\"errmsg\":\"ok\"}".equals(result)) {
 					o.setSendFlag("1");
-				} else { // 没有发送
+				} else { // 没有发送成功
 					o.setSendFlag(result);
 				}
 				commExeSqlDAO.updateVO("cms_out_box.updateByKeyNotNull", o);
