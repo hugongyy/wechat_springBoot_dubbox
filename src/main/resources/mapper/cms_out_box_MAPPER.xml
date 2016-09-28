@@ -22,6 +22,12 @@
 			<if test="msgFrom!= null">
 				and msg_from=#{msgFrom}
 			</if>
+			<if test="orderNo!= null">
+				and order_no=#{orderNo}
+			</if>
+			<if test="orderType!= null">
+				and order_type=#{orderType}
+			</if>
 			<if test="msgContent!= null">
 				and msg_content=#{msgContent}
 			</if>
@@ -50,6 +56,8 @@
 			msg_type as msgType,
 			msg_to as msgTo,
 			msg_from as msgFrom,
+			order_no as orderNo,
+			order_type as orderType,
 			msg_content as msgContent,
 			send_flag as sendFlag,
 			send_time as sendTime,
@@ -72,6 +80,12 @@
             </if>
 		    <if test="msgFrom!= null">
                   and msg_from=#{msgFrom}
+            </if>
+		    <if test="orderNo!= null">
+                  and order_no=#{orderNo}
+            </if>
+		    <if test="orderType!= null">
+                  and order_type=#{orderType}
             </if>
 		    <if test="msgContent!= null">
                   and msg_content=#{msgContent}
@@ -113,6 +127,12 @@
 					<if test="msgFrom!= null">
 		                   msg_from,
 		            </if>
+					<if test="orderNo!= null">
+		                   order_no,
+		            </if>
+					<if test="orderType!= null">
+		                   order_type,
+		            </if>
 					<if test="msgContent!= null">
 		                   msg_content,
 		            </if>
@@ -151,6 +171,12 @@
 		   			<if test="msgFrom!= null">
 		   			#{msgFrom},
 		   			</if>
+		   			<if test="orderNo!= null">
+		   			#{orderNo},
+		   			</if>
+		   			<if test="orderType!= null">
+		   			#{orderType},
+		   			</if>
 		   			<if test="msgContent!= null">
 		   			#{msgContent},
 		   			</if>
@@ -180,6 +206,8 @@
 			msg_type as msgType, 
 			msg_to as msgTo, 
 			msg_from as msgFrom, 
+			order_no as orderNo, 
+			order_type as orderType, 
 			msg_content as msgContent, 
 			send_flag as sendFlag, 
 			send_time as sendTime, 
@@ -215,6 +243,12 @@
 		   			</if>  
 					<if test="msgFrom!= null">
 		   			msg_from = #{msgFrom},
+		   			</if>  
+					<if test="orderNo!= null">
+		   			order_no = #{orderNo},
+		   			</if>  
+					<if test="orderType!= null">
+		   			order_type = #{orderType},
 		   			</if>  
 					<if test="msgContent!= null">
 		   			msg_content = #{msgContent},

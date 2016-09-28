@@ -569,7 +569,7 @@
 		o.ext2 as ext2,
 		o.buyer_user_name as buyerUserName,
 		o.buyer_user_id as buyerUserId,
-		
+		o.seller_user_id as sellerUserId,
 		o.payer_user_id as payerUserId,
 		o.seller_user_name as sellerUserName,
 		s.mobile as sellerUserType,

@@ -1,13 +1,10 @@
-package com.chetong.ctwechat.entity.mapping; 
+package com.chetong.ctwechat.entity.mapping;  
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class CmsOutBox implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	/**
 	 * 属性定义.
 	 */
@@ -17,8 +14,10 @@ public class CmsOutBox implements java.io.Serializable {
 	private String msgType;	/*-- 消息类型:1-微信推送,2-短信 --*/
 	private String msgTo;	/*-- 消息发送给(微信:openid,短信:手机号码) --*/
 	private String msgFrom;	/*-- 消息来源 --*/
+	private String orderNo;	/*-- 订单号 --*/
+	private String orderType;	/*-- 订单类型 --*/
 	private String msgContent;	/*-- 消息内容 --*/
-	private String sendFlag;	/*-- 发送标志:0-未发送,1-发送成功,-1-发送失败 --*/
+	private String sendFlag;	/*-- 发送标志:0-未发送,1-发送成功,其他-发送失败 --*/
 	private Date sendTime;	/*-- 发送时间 --*/
 	private Integer sendNum;	/*-- 发送次数 --*/
 	private String createBy;	/*-- 创建人 --*/
@@ -111,6 +110,38 @@ public class CmsOutBox implements java.io.Serializable {
   
 	public void setMsgFrom(String msgFrom){
 		this.msgFrom = msgFrom;
+	}
+
+		
+	/**
+	 * getOrderNo.
+	 */
+	public String getOrderNo(){
+		return orderNo;
+	}
+	
+	/**
+   * setOrderNo.
+   */
+  
+	public void setOrderNo(String orderNo){
+		this.orderNo = orderNo;
+	}
+
+		
+	/**
+	 * getOrderType.
+	 */
+	public String getOrderType(){
+		return orderType;
+	}
+	
+	/**
+   * setOrderType.
+   */
+  
+	public void setOrderType(String orderType){
+		this.orderType = orderType;
 	}
 
 		
