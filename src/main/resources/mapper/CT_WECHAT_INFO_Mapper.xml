@@ -589,8 +589,8 @@
 		where o.service_id = 1
 		and o.import_type = '0'
 		and o.deal_stat = '04'
-		and ( (o.subject_id = '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 11 and 12) 
-			or  (o.subject_id in ('1','2','3') and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 23 and 24) )
+		and ( (o.order_type = '0' and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 11 and 12) 
+			or  (o.order_type in ('1','2','3') and TIMESTAMPDIFF(HOUR, o.send_time, NOW()) BETWEEN 23 and 24) )
 		and (b.bind_id is not null OR b2.bind_id is not null)
 	</select>
 	
