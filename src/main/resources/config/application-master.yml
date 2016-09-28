@@ -34,5 +34,5 @@ headerUrl: http://cs.chetong.net/
 appid: wx7daf851ff9bac648
 appsecret: 9072255787f6a773122600fe058582ac
 WE_CHAT_PUSH_SWITCH: Y
-zookeeper.address: 10.249.145.160:2181
+zookeeper.address: 10.104.27.127:2181
 dubbo.group: master
