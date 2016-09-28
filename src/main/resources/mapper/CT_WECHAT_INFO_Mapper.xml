@@ -581,7 +581,7 @@
 		<foreach collection="spAreas" item="area" open="(" separator="," close=")">
              #{area}
         </foreach>
- 		then (case when  g.city_code = o.ext2  then 1 else 2 end ) ELSE (case when  g.prov_code = o.ext1  then 1 else 2 end )  END ) = 1
+ 		then (case when  g.city_code = o.ext2  then 1 else 2 end ) ELSE (case when  g.prov_code = o.ext1  then 1 else 2 end )  END ) = 1 and g.is_manage_org = '1'
 		inner JOIN ct_user u2 on g.user_id = u2.id and u2.user_type = '1'
 		left join ct_bind_info b on b.user_id = o.seller_user_id
 		left join ct_bind_info b2 on b2.user_id = g.user_id
