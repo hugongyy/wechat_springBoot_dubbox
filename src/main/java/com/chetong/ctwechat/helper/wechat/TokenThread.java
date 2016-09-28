@@ -26,12 +26,18 @@ public class TokenThread {
 	private String appid;
 	@Value("${appsecret}")
 	private String appsecret;
+	@Value("${WE_CHAT_PUSH_SWITCH}")
+	private String WE_CHAT_PUSH_SWITCH;
 
 	@Scheduled(fixedRate = 5 * 60 * 1000)
 	// @Scheduled(fixedDelay = 7100 * 1000)
 	// @Scheduled(cron = "*/5 * * * * *")
 	public void getAccess() {
 		try {
+			if(!"Y".equals(WE_CHAT_PUSH_SWITCH)){
+				return;
+			}
+			
 			accessToken = WeixinUtil.getAccessToken(appid, appsecret);
 			if (null != accessToken) {
 				log.info("get access_token SUCCESS ,times{}s token:{}", accessToken.getExpiresIn(),
