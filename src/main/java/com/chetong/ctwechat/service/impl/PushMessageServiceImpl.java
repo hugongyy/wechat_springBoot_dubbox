@@ -73,7 +73,7 @@ public class PushMessageServiceImpl implements PushMessageService {
 		if (!"Y".equals(WE_CHAT_PUSH_SWITCH)) {
 			return;
 		}
-		
+		// TODO 应该把超时订单,分别查询车童和机构负责人的list.
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("spAreas", spAreas);
 		List<FmOrder> orderList = commExeSqlDAO.queryForList("CT_WECHAT_INFO.autoSendOverTimeOrder2SellerAndOrg",
