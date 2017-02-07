@@ -1,0 +1,2 @@
+# wechat_springBoot_dubbox
+使用微服务框架springBoot结合基本微信开发与dubbox整合（注意dubbox的springjar与springBoot的jar有冲突，需要排除dubbox的）
