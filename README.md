@@ -1,2 +1,0 @@
-# wechat_springBoot_dubbox
-使用微服务框架springBoot结合基本微信开发与dubbox
