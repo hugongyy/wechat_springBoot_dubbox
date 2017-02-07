@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="custom_rank_mapper">
+
+	<select id="queryUserMenuList" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.CtAuth">
+		SELECT DISTINCT
+			a.id AS id,
+			a.pid AS pid,
+			a.auth_name AS authName,
+			a.auth_desc AS authDesc,
+			a.app_id AS appId,
+			a.node_level AS nodeLevel,
+			a.auth_type AS authType,
+			a.auth_key AS authKey,
+			a.sort_order AS sortOrder
+		FROM
+			ct_user_roles ur
+		INNER JOIN ct_roles_auth ra ON ur.role_id = ra.role_id
+		INNER JOIN ct_auth a ON ra.auth_id = a.id
+		INNER JOIN ct_auth a2 ON a.pid = a2.id
+		WHERE a.`enable` = '0'
+		AND a.auth_type = '2'
+		AND a2.auth_name = #{authName}
+		AND ur.user_id = #{userId}	
+	</select>
+	
+	<select id="queryUserAreaCodes" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT GROUP_CONCAT(a.prov_code) AS provCode 
+		FROM ct_user_auth_area a 
+		INNER JOIN ct_auth ca ON a.auth_id = ca.id 
+		WHERE ca.auth_name = #{authName} AND a.user_id = #{userId}
+	</select>
+
+	<select id="queryUserGroup" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.mapping.CtGroup">
+		SELECT g.id AS id, g.org_name AS orgName, g.prov_code AS provCode, g.city_code AS cityCode 
+		FROM ct_group g 
+		WHERE g.user_id = #{userId} OR g.user_id IN (SELECT pid FROM ct_user u WHERE u.id = #{userId}) LIMIT 1
+	</select>
+	
+	<select id="allCompanyRank" parameterType="java.util.Map" resultType="com.chetong.ctwechat.entity.model.RankInfo">
+		SELECT
+			kk.buyerUserId,
+			g.org_name,
+			count(1) AS cnt
+		FROM
+			(
+				SELECT
+					o.id AS id,
+					l.up_user_id AS buyerUserId
+				FROM
+					fm_order o
+				LEFT JOIN ct_user_level l ON o.buyer_user_id = l.user_id
+				LEFT JOIN ct_group g ON g.user_id = o.buyer_user_id
+				WHERE
+					o.deal_stat = '09'
+				AND o.is_remote = '1'
+				AND DATE_FORMAT(o.final_time, '%Y-%m') = #{date}
+				AND g.is_manage_org != '1'
+			) kk,
+			ct_group g
+		WHERE
+			kk.buyerUserId = g.user_id
+		GROUP BY
+			kk.buyerUserId
+		ORDER BY
+			cnt DESC,
+			buyerUserId
+		LIMIT 0, 10;
+	</select>
+	
+	<select id="queryFmOrder8NoAndUserId" parameterType="com.chetong.ctwechat.entity.mapping.FmOrder" 
+		resultType="com.chetong.ctwechat.entity.mapping.FmOrder">
+		SELECT
+			id AS id,
+			deal_stat AS dealStat,
+			order_source AS orderSource,
+			order_type AS orderType,
+			order_no AS orderNo,
+			case_id AS caseId,
+			case_no AS caseNo,
+			car_no AS carNo,
+			buyer_user_id AS buyerUserId,
+			buyer_user_type AS buyerUserType,
+			payer_user_id AS payerUserId,
+			seller_user_id AS sellerUserId,
+			seller_user_type AS sellerUserType,
+			service_id AS serviceId,
+			service_name AS serviceName,
+			subject_id AS subjectId,
+			subject_name AS subjectName,
+			work_address AS workAddress,
+			longtitude AS longtitude,
+			latitude AS latitude,
+			link_man AS linkMan,
+			AES_DECRYPT(UNHEX(link_tel), 'CHEtong@20161102') AS linkTel,
+			mileage AS mileage,
+			get_time AS getTime,
+			finish_time AS finishTime,
+			send_time AS sendTime,
+			preliminary_time AS preliminaryTime,
+			preliminary_desc AS preliminaryDesc,
+			final_time AS finalTime,
+			final_desc AS finalDesc,
+			send_id AS sendId,
+			group_user_id AS groupUserId,
+			buyer_user_name AS buyerUserName,
+			seller_user_name AS sellerUserName,
+			buyer_mobile AS buyerMobile
+		FROM
+			fm_order o
+		WHERE
+		(	o.order_no like CONCAT('%',#{orderNo},'%')
+			OR o.car_no like CONCAT('%',#{carNo},'%') )
+		AND (
+			o.seller_user_id = #{sellerUserId}
+			OR o.buyer_user_id = #{buyerUserId}
+			OR o.group_user_id = #{groupUserId}
+		)
+		order by o.id desc limit 0, 5
+	</select>
+	
+	<select id="queryTeamUserIds8OrgUserId" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT g.user_id FROM ct_team_organization o, ct_group g, ct_group g2 where o.team_id = g.id and o.org_id = g2.id and g2.user_id = #{orgUserId}
+	</select>
+
+</mapper>

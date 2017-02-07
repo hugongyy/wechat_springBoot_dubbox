@@ -1,0 +1,61 @@
+server:
+  port: 8084
+  context-path: /ctwechat/
+spring:
+    datasource:
+        name: test
+        url: jdbc:mysql://localhost:3306/prd1104?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&noAccessToProcedureBodies=true
+        username: root
+        password: chetong@828
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        filters: stat,wall,log4j
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+        connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+  config-location: classpath:config/mybatis_config.xml
+
+## 自定义配置
+headerUrl: http://qa.chetong.net/
+
+appid: wx8eda4c135b1ad955
+appsecret: 7a6d09c0f8a25118f109785d942f09f1
+WE_CHAT_PUSH_SWITCH: Y
+zookeeper.address: 10.249.145.160:2181
+dubbo.group: release
+
+loginValidTime: 3600
+redis.host: 10.249.145.160
+redis.port: 6379
+redis.auth: tt3&cmQ8UB
+
+# 亿美短信服务器配置
+softwareSerialNo: 464634
+key: fgujdasgfjs456
+
+# tencent短信服务器配置
+sdkappid: 140001840456
+appkey: 0c65dbcfb327977a2fa54df651646
+
+# 是否测试环境.
+isTestEnv : Y
+
+# 邦业总部的userId
+anBangCompanyUserId: 30367
+
+# 微信公众号的消息模板ID,推送模板消息时必须要.
+newOrderTemplateId: t8y2ogBMXICoISLsmT8W55fRct6kiw2cU9vDndESK_Y
+changeStatTemplateId: fzf0MoDggmyJLI-mVy3fGeb-OXxXTJHziodKBMMLmmc

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cms_out_box">
+
+	<select id="queryCountCmsOutBox" parameterType="com.chetong.ctwechat.entity.mapping.CmsOutBox" resultType="java.lang.Long" >
+		SELECT 
+			count(*)
+		FROM cms_out_box 
+		<where>
+			<if test="id!= null">
+				and id=#{id}
+			</if>
+			<if test="userId!= null">
+				and user_id=#{userId}
+			</if>
+			<if test="msgType!= null">
+				and msg_type=#{msgType}
+			</if>
+			<if test="msgTo!= null">
+				and msg_to=#{msgTo}
+			</if>
+			<if test="msgFrom!= null">
+				and msg_from=#{msgFrom}
+			</if>
+			<if test="orderNo!= null">
+				and order_no=#{orderNo}
+			</if>
+			<if test="orderType!= null">
+				and order_type=#{orderType}
+			</if>
+			<if test="msgContent!= null">
+				and msg_content=#{msgContent}
+			</if>
+			<if test="sendFlag!= null">
+				and send_flag=#{sendFlag}
+			</if>
+			<if test="sendTime!= null">
+				and send_time=#{sendTime}
+			</if>
+			<if test="sendNum!= null">
+				and send_num=#{sendNum}
+			</if>
+			<if test="createBy!= null">
+				and create_by=#{createBy}
+			</if>
+			<if test="createTime!= null">
+				and create_time=#{createTime}
+			</if>
+		</where> 
+	</select>
+	
+	<select id="queryCmsOutBox" parameterType="com.chetong.ctwechat.entity.mapping.CmsOutBox" resultType ="com.chetong.ctwechat.entity.mapping.CmsOutBox" >
+		SELECT 
+			id as id,
+			user_id as userId,
+			msg_type as msgType,
+			msg_to as msgTo,
+			msg_from as msgFrom,
+			order_no as orderNo,
+			order_type as orderType,
+			msg_content as msgContent,
+			send_flag as sendFlag,
+			send_time as sendTime,
+			send_num as sendNum,
+			create_by as createBy,
+			create_time as createTime
+		FROM cms_out_box 
+		 <where>
+		    <if test="id!= null">
+                  and id=#{id}
+            </if>
+		    <if test="userId!= null">
+                  and user_id=#{userId}
+            </if>
+		    <if test="msgType!= null">
+                  and msg_type=#{msgType}
+            </if>
+		    <if test="msgTo!= null">
+                  and msg_to=#{msgTo}
+            </if>
+		    <if test="msgFrom!= null">
+                  and msg_from=#{msgFrom}
+            </if>
+		    <if test="orderNo!= null">
+                  and order_no=#{orderNo}
+            </if>
+		    <if test="orderType!= null">
+                  and order_type=#{orderType}
+            </if>
+		    <if test="msgContent!= null">
+                  and msg_content=#{msgContent}
+            </if>
+		    <if test="sendFlag!= null">
+                  and send_flag=#{sendFlag}
+            </if>
+		    <if test="sendTime!= null">
+                  and send_time=#{sendTime}
+            </if>
+		    <if test="sendNum!= null">
+                  and send_num=#{sendNum}
+            </if>
+		    <if test="createBy!= null">
+                  and create_by=#{createBy}
+            </if>
+		    <if test="createTime!= null">
+                  and create_time=#{createTime}
+            </if>
+  		</where>
+	</select>
+	
+		<insert id="insertNotNull" parameterType="com.chetong.ctwechat.entity.mapping.CmsOutBox" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO cms_out_box   
+			(
+				<trim suffix="" suffixOverrides=",">
+					<if test="id!= null">
+		                   id,
+		            </if>
+					<if test="userId!= null">
+		                   user_id,
+		            </if>
+					<if test="msgType!= null">
+		                   msg_type,
+		            </if>
+					<if test="msgTo!= null">
+		                   msg_to,
+		            </if>
+					<if test="msgFrom!= null">
+		                   msg_from,
+		            </if>
+					<if test="orderNo!= null">
+		                   order_no,
+		            </if>
+					<if test="orderType!= null">
+		                   order_type,
+		            </if>
+					<if test="msgContent!= null">
+		                   msg_content,
+		            </if>
+					<if test="sendFlag!= null">
+		                   send_flag,
+		            </if>
+					<if test="sendTime!= null">
+		                   send_time,
+		            </if>
+					<if test="sendNum!= null">
+		                   send_num,
+		            </if>
+					<if test="createBy!= null">
+		                   create_by,
+		            </if>
+					<if test="createTime!= null">
+		                   create_time,
+		            </if>
+	            </trim>
+			)
+			VALUES
+	   		(
+	   			<trim suffix="" suffixOverrides=",">
+		   			<if test="id!= null">
+		   			#{id},
+		   			</if>
+		   			<if test="userId!= null">
+		   			#{userId},
+		   			</if>
+		   			<if test="msgType!= null">
+		   			#{msgType},
+		   			</if>
+		   			<if test="msgTo!= null">
+		   			#{msgTo},
+		   			</if>
+		   			<if test="msgFrom!= null">
+		   			#{msgFrom},
+		   			</if>
+		   			<if test="orderNo!= null">
+		   			#{orderNo},
+		   			</if>
+		   			<if test="orderType!= null">
+		   			#{orderType},
+		   			</if>
+		   			<if test="msgContent!= null">
+		   			#{msgContent},
+		   			</if>
+		   			<if test="sendFlag!= null">
+		   			#{sendFlag},
+		   			</if>
+		   			<if test="sendTime!= null">
+		   			#{sendTime},
+		   			</if>
+		   			<if test="sendNum!= null">
+		   			#{sendNum},
+		   			</if>
+		   			<if test="createBy!= null">
+		   			#{createBy},
+		   			</if>
+		   			<if test="createTime!= null">
+		   			#{createTime},
+		   			</if>
+	   			</trim>
+			)
+		</insert>
+
+	<select id="queryByKey" resultType="com.chetong.ctwechat.entity.mapping.CmsOutBox">
+		SELECT 
+			id as id, 
+			user_id as userId, 
+			msg_type as msgType, 
+			msg_to as msgTo, 
+			msg_from as msgFrom, 
+			order_no as orderNo, 
+			order_type as orderType, 
+			msg_content as msgContent, 
+			send_flag as sendFlag, 
+			send_time as sendTime, 
+			send_num as sendNum, 
+			create_by as createBy, 
+			create_time as createTime 
+		FROM
+			cms_out_box
+	    <where>		   
+		    	 and id = #{id}
+		</where>
+	</select>
+	
+	<delete id="deleteByKey">
+		DELETE FROM 
+			cms_out_box 
+		<where>		   
+		    	 and id = #{id}
+		</where>
+	</delete>
+	
+	<update id="updateByKeyNotNull">
+		UPDATE cms_out_box 
+		  <trim prefix="SET" suffixOverrides=",">  
+					<if test="userId!= null">
+		   			user_id = #{userId},
+		   			</if>  
+					<if test="msgType!= null">
+		   			msg_type = #{msgType},
+		   			</if>  
+					<if test="msgTo!= null">
+		   			msg_to = #{msgTo},
+		   			</if>  
+					<if test="msgFrom!= null">
+		   			msg_from = #{msgFrom},
+		   			</if>  
+					<if test="orderNo!= null">
+		   			order_no = #{orderNo},
+		   			</if>  
+					<if test="orderType!= null">
+		   			order_type = #{orderType},
+		   			</if>  
+					<if test="msgContent!= null">
+		   			msg_content = #{msgContent},
+		   			</if>  
+					<if test="sendFlag!= null">
+		   			send_flag = #{sendFlag},
+		   			</if>  
+					<if test="sendTime!= null">
+		   			send_time = #{sendTime},
+		   			</if>  
+					<if test="sendNum!= null">
+		   			send_num = #{sendNum},
+		   			</if>  
+					<if test="createBy!= null">
+		   			create_by = #{createBy},
+		   			</if>  
+					<if test="createTime!= null">
+		   			create_time = #{createTime},
+		   			</if>  
+		  </trim>
+		  <where>	   
+				    and id = #{id}
+		 </where>
+	</update>
+</mapper>

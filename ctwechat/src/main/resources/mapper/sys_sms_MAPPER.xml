@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sys_sms">
+
+	<select id="queryCountSysSms" parameterType="com.chetong.ctwechat.entity.mapping.SysSms"
+		resultType="java.lang.Long">
+		SELECT
+		count(*)
+		FROM sys_sms
+		<where>
+			<if test="id!= null">
+				and id=#{id}
+			</if>
+			<if test="smsType!= null">
+				and sms_type=#{smsType}
+			</if>
+			<if test="mobileNumber!= null">
+				and mobile_number=#{mobileNumber}
+			</if>
+			<if test="smsContent!= null">
+				and sms_content like concat('%',#{smsContent},'%')
+			</if>
+			<if test="channelNumber!= null">
+				and channel_number=#{channelNumber}
+			</if>
+			<if test="addSerialRav!= null">
+				and add_serial_rav=#{addSerialRav}
+			</if>
+			<if test="addSerial!= null">
+				and add_serial=#{addSerial}
+			</if>
+			<if test="sentTime!= null">
+				and sent_time=#{sentTime}
+			</if>
+			<if test="smsStatus!= null">
+				and sms_status=#{smsStatus}
+			</if>
+			<if test="dealStatus!= null">
+				and deal_status=#{dealStatus}
+			</if>
+			<if test="smsRemark!= null">
+				and sms_remark like concat('%',#{smsRemark},'%')
+			</if>
+			<if test="remarkCreater!= null">
+				and remark_creater=#{remarkCreater}
+			</if>
+			<if test="createTime!= null">
+				and create_time=#{createTime}
+			</if>
+			<if test="receiverId!= null">
+				and receiver_id=#{receiverId}
+			</if>
+			<if test="senderId!= null">
+				and sender_id=#{senderId}
+			</if>
+			<if test="replyPid!= null">
+				and reply_pid=#{replyPid}
+			</if>
+			<if test="ext1!= null">
+				and ext1=#{ext1}
+			</if>
+			<if test="ext2!= null">
+				and ext2=#{ext2}
+			</if>
+			<if test="ext3!= null">
+				and ext3=#{ext3}
+			</if>
+		</where>
+	</select>
+
+
+
+	<insert id="insertNotNull" parameterType="com.chetong.ctwechat.entity.mapping.SysSms"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_sms
+		(
+		<trim suffix="" suffixOverrides=",">
+			<if test="id!= null">
+				id,
+			</if>
+			<if test="smsType!= null">
+				sms_type,
+			</if>
+			<if test="mobileNumber!= null">
+				mobile_number,
+			</if>
+			<if test="smsContent!= null">
+				sms_content,
+			</if>
+			<if test="channelNumber!= null">
+				channel_number,
+			</if>
+			<if test="addSerialRav!= null">
+				add_serial_rav,
+			</if>
+			<if test="addSerial!= null">
+				add_serial,
+			</if>
+			<if test="sentTime!= null">
+				sent_time,
+			</if>
+			<if test="smsStatus!= null">
+				sms_status,
+			</if>
+			<if test="dealStatus!= null">
+				deal_status,
+			</if>
+			<if test="smsRemark!= null">
+				sms_remark,
+			</if>
+			<if test="remarkCreater!= null">
+				remark_creater,
+			</if>
+			<if test="createTime!= null">
+				create_time,
+			</if>
+			<if test="receiverId!= null">
+				receiver_id,
+			</if>
+			<if test="senderId!= null">
+				sender_id,
+			</if>
+			<if test="replyPid!= null">
+				reply_pid,
+			</if>
+			<if test="ext1!= null">
+				ext1,
+			</if>
+			<if test="ext2!= null">
+				ext2,
+			</if>
+			<if test="ext3!= null">
+				ext3,
+			</if>
+		</trim>
+		)
+		VALUES
+		(
+		<trim suffix="" suffixOverrides=",">
+			<if test="id!= null">
+				#{id},
+			</if>
+			<if test="smsType!= null">
+				#{smsType},
+			</if>
+			<if test="mobileNumber!= null">
+				#{mobileNumber},
+			</if>
+			<if test="smsContent!= null">
+				#{smsContent},
+			</if>
+			<if test="channelNumber!= null">
+				#{channelNumber},
+			</if>
+			<if test="addSerialRav!= null">
+				#{addSerialRav},
+			</if>
+			<if test="addSerial!= null">
+				#{addSerial},
+			</if>
+			<if test="sentTime!= null">
+				#{sentTime},
+			</if>
+			<if test="smsStatus!= null">
+				#{smsStatus},
+			</if>
+			<if test="dealStatus!= null">
+				#{dealStatus},
+			</if>
+			<if test="smsRemark!= null">
+				#{smsRemark},
+			</if>
+			<if test="remarkCreater!= null">
+				#{remarkCreater},
+			</if>
+			<if test="createTime!= null">
+				#{createTime},
+			</if>
+			<if test="receiverId!= null">
+				#{receiverId},
+			</if>
+			<if test="senderId!= null">
+				#{senderId},
+			</if>
+			<if test="replyPid!= null">
+				#{replyPid},
+			</if>
+			<if test="ext1!= null">
+				#{ext1},
+			</if>
+			<if test="ext2!= null">
+				#{ext2},
+			</if>
+			<if test="ext3!= null">
+				#{ext3},
+			</if>
+		</trim>
+		)
+	</insert>
+
+	<select id="queryByKey" resultType="com.chetong.ctwechat.entity.mapping.SysSms">
+		SELECT
+		id as id,
+		sms_type as smsType,
+		mobile_number as mobileNumber,
+		sms_content as smsContent,
+		channel_number as channelNumber,
+		add_serial_rav as addSerialRav,
+		add_serial as addSerial,
+		sent_time as sentTime,
+		sms_status as smsStatus,
+		deal_status as dealStatus,
+		sms_remark as smsRemark,
+		remark_creater as remarkCreater,
+		create_time as createTime,
+		receiver_id as receiverId,
+		sender_id as senderId,
+		reply_pid as replyPid,
+		ext1 as ext1,
+		ext2 as ext2,
+		ext3 as ext3
+		FROM
+		sys_sms
+		<where>
+			and id = #{id}
+		</where>
+	</select>
+
+	<delete id="deleteByKey">
+		DELETE FROM
+		sys_sms
+		<where>
+			and id = #{id}
+		</where>
+	</delete>
+
+	<update id="updateByKeyNotNull">
+		UPDATE sys_sms
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="smsType!= null">
+				sms_type = #{smsType},
+			</if>
+			<if test="mobileNumber!= null">
+				mobile_number = #{mobileNumber},
+			</if>
+			<if test="smsContent!= null">
+				sms_content = #{smsContent},
+			</if>
+			<if test="channelNumber!= null">
+				channel_number = #{channelNumber},
+			</if>
+			<if test="addSerialRav!= null">
+				add_serial_rav = #{addSerialRav},
+			</if>
+			<if test="addSerial!= null">
+				add_serial = #{addSerial},
+			</if>
+			<if test="sentTime!= null">
+				sent_time = #{sentTime},
+			</if>
+			<if test="smsStatus!= null">
+				sms_status = #{smsStatus},
+			</if>
+			<if test="dealStatus!= null">
+				deal_status = #{dealStatus},
+			</if>
+			<if test="smsRemark!= null">
+				sms_remark = #{smsRemark},
+			</if>
+			<if test="remarkCreater!= null">
+				remark_creater = #{remarkCreater},
+			</if>
+			<if test="createTime!= null">
+				create_time = #{createTime},
+			</if>
+			<if test="receiverId!= null">
+				receiver_id = #{receiverId},
+			</if>
+			<if test="senderId!= null">
+				sender_id = #{senderId},
+			</if>
+			<if test="replyPid!= null">
+				reply_pid = #{replyPid},
+			</if>
+			<if test="ext1!= null">
+				ext1 = #{ext1},
+			</if>
+			<if test="ext2!= null">
+				ext2 = #{ext2},
+			</if>
+			<if test="ext3!= null">
+				ext3 = #{ext3},
+			</if>
+		</trim>
+		<where>			
+			and id = #{id}			
+		</where>
+	</update>
+	
+	<update id="updateByReplayPid">
+		UPDATE sys_sms
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="smsType!= null">
+				sms_type = #{smsType},
+			</if>
+			<if test="mobileNumber!= null">
+				mobile_number = #{mobileNumber},
+			</if>
+			<if test="smsContent!= null">
+				sms_content = #{smsContent},
+			</if>
+			<if test="channelNumber!= null">
+				channel_number = #{channelNumber},
+			</if>
+			<if test="addSerialRav!= null">
+				add_serial_rav = #{addSerialRav},
+			</if>
+			<if test="addSerial!= null">
+				add_serial = #{addSerial},
+			</if>
+			<if test="sentTime!= null">
+				sent_time = #{sentTime},
+			</if>
+			<if test="smsStatus!= null">
+				sms_status = #{smsStatus},
+			</if>
+			<if test="dealStatus!= null">
+				deal_status = #{dealStatus},
+			</if>
+			<if test="smsRemark!= null">
+				sms_remark = #{smsRemark},
+			</if>
+			<if test="remarkCreater!= null">
+				remark_creater = #{remarkCreater},
+			</if>
+			<if test="createTime!= null">
+				create_time = #{createTime},
+			</if>
+			<if test="receiverId!= null">
+				receiver_id = #{receiverId},
+			</if>
+			<if test="senderId!= null">
+				sender_id = #{senderId},
+			</if>
+			<if test="replyPid!= null">
+				reply_pid = #{replyPid},
+			</if>
+			<if test="ext1!= null">
+				ext1 = #{ext1},
+			</if>
+			<if test="ext2!= null">
+				ext2 = #{ext2},
+			</if>
+			<if test="ext3!= null">
+				ext3 = #{ext3},
+			</if>
+		</trim>
+		<where>
+			and reply_pid = #{replyPid}
+		</where>
+	</update>
+</mapper>

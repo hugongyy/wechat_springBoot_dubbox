@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cms_template_info">
+
+	<select id="queryCountCmsTemplateInfo" parameterType="com.chetong.ctwechat.entity.mapping.CmsTemplateInfo" resultType="java.lang.Long" >
+		SELECT 
+			count(*)
+		FROM cms_template_info 
+		<where>
+			<if test="id!= null">
+				and id=#{id}
+			</if>
+			<if test="templateType!= null">
+				and template_type=#{templateType}
+			</if>
+			<if test="templateNo!= null">
+				and template_no=#{templateNo}
+			</if>
+			<if test="templateInfo!= null">
+				and template_info=#{templateInfo}
+			</if>
+			<if test="createId!= null">
+				and create_id=#{createId}
+			</if>
+			<if test="createTime!= null">
+				and create_time=#{createTime}
+			</if>
+			<if test="updateId!= null">
+				and update_id=#{updateId}
+			</if>
+			<if test="updateTime!= null">
+				and update_time=#{updateTime}
+			</if>
+		</where> 
+	</select>
+	
+	<select id="queryCmsTemplateInfo" parameterType="com.chetong.ctwechat.entity.mapping.CmsTemplateInfo" resultType ="com.chetong.ctwechat.entity.mapping.CmsTemplateInfo" >
+		SELECT 
+			id as id,
+			template_type as templateType,
+			template_no as templateNo,
+			template_info as templateInfo,
+			create_id as createId,
+			create_time as createTime,
+			update_id as updateId,
+			update_time as updateTime
+		FROM cms_template_info 
+		 <where>
+		    <if test="id!= null">
+                  and id=#{id}
+            </if>
+		    <if test="templateType!= null">
+                  and template_type=#{templateType}
+            </if>
+		    <if test="templateNo!= null">
+                  and template_no=#{templateNo}
+            </if>
+		    <if test="templateInfo!= null">
+                  and template_info=#{templateInfo}
+            </if>
+		    <if test="createId!= null">
+                  and create_id=#{createId}
+            </if>
+		    <if test="createTime!= null">
+                  and create_time=#{createTime}
+            </if>
+		    <if test="updateId!= null">
+                  and update_id=#{updateId}
+            </if>
+		    <if test="updateTime!= null">
+                  and update_time=#{updateTime}
+            </if>
+  		</where>
+	</select>
+	
+		<insert id="insertNotNull" parameterType="com.chetong.ctwechat.entity.mapping.CmsTemplateInfo" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO cms_template_info   
+			(
+				<trim suffix="" suffixOverrides=",">
+					<if test="id!= null">
+		                   id,
+		            </if>
+					<if test="templateType!= null">
+		                   template_type,
+		            </if>
+					<if test="templateNo!= null">
+		                   template_no,
+		            </if>
+					<if test="templateInfo!= null">
+		                   template_info,
+		            </if>
+					<if test="createId!= null">
+		                   create_id,
+		            </if>
+					<if test="createTime!= null">
+		                   create_time,
+		            </if>
+					<if test="updateId!= null">
+		                   update_id,
+		            </if>
+					<if test="updateTime!= null">
+		                   update_time,
+		            </if>
+	            </trim>
+			)
+			VALUES
+	   		(
+	   			<trim suffix="" suffixOverrides=",">
+		   			<if test="id!= null">
+		   			#{id},
+		   			</if>
+		   			<if test="templateType!= null">
+		   			#{templateType},
+		   			</if>
+		   			<if test="templateNo!= null">
+		   			#{templateNo},
+		   			</if>
+		   			<if test="templateInfo!= null">
+		   			#{templateInfo},
+		   			</if>
+		   			<if test="createId!= null">
+		   			#{createId},
+		   			</if>
+		   			<if test="createTime!= null">
+		   			#{createTime},
+		   			</if>
+		   			<if test="updateId!= null">
+		   			#{updateId},
+		   			</if>
+		   			<if test="updateTime!= null">
+		   			#{updateTime},
+		   			</if>
+	   			</trim>
+			)
+		</insert>
+
+	<select id="queryByKey" resultType="com.chetong.ctwechat.entity.mapping.CmsTemplateInfo">
+		SELECT 
+			id as id, 
+			template_type as templateType, 
+			template_no as templateNo, 
+			template_info as templateInfo, 
+			create_id as createId, 
+			create_time as createTime, 
+			update_id as updateId, 
+			update_time as updateTime 
+		FROM
+			cms_template_info
+	    <where>		   
+		    	 and id = #{id}
+		</where>
+	</select>
+	
+	<delete id="deleteByKey">
+		DELETE FROM 
+			cms_template_info 
+		<where>		   
+		    	 and id = #{id}
+		</where>
+	</delete>
+	
+	<update id="updateByKeyNotNull">
+		UPDATE cms_template_info 
+		  <trim prefix="SET" suffixOverrides=",">  
+					<if test="templateType!= null">
+		   			template_type = #{templateType},
+		   			</if>  
+					<if test="templateNo!= null">
+		   			template_no = #{templateNo},
+		   			</if>  
+					<if test="templateInfo!= null">
+		   			template_info = #{templateInfo},
+		   			</if>  
+					<if test="createId!= null">
+		   			create_id = #{createId},
+		   			</if>  
+					<if test="createTime!= null">
+		   			create_time = #{createTime},
+		   			</if>  
+					<if test="updateId!= null">
+		   			update_id = #{updateId},
+		   			</if>  
+					<if test="updateTime!= null">
+		   			update_time = #{updateTime},
+		   			</if>  
+		  </trim>
+		  <where>	   
+				    and id = #{id}
+		 </where>
+	</update>
+</mapper>

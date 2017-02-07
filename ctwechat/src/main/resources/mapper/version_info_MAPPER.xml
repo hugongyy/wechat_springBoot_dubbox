@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="version_info">
+
+	<select id="queryCountVersionInfo" parameterType="com.chetong.ctwechat.entity.mapping.VersionInfo" resultType="java.lang.Long" >
+		SELECT 
+			count(*)
+		FROM version_info 
+		<where>
+			<if test="id!= null">
+				and id=#{id}
+			</if>
+			<if test="versionType!= null">
+				and version_type=#{versionType}
+			</if>
+			<if test="versionCode!= null">
+				and version_code=#{versionCode}
+			</if>
+			<if test="versionContent!= null">
+				and version_content=#{versionContent}
+			</if>
+			<if test="versionUrl!= null">
+				and version_url=#{versionUrl}
+			</if>
+			<if test="versionDate!= null">
+				and version_date=#{versionDate}
+			</if>
+		</where> 
+	</select>
+	
+	<select id="queryVersionInfo" parameterType="com.chetong.ctwechat.entity.mapping.VersionInfo" resultType ="com.chetong.ctwechat.entity.mapping.VersionInfo" >
+		SELECT 
+			id as id,
+			version_type as versionType,
+			version_code as versionCode,
+			version_content as versionContent,
+			version_url as versionUrl,
+			version_date as versionDate
+		FROM version_info 
+		 <where>
+		    <if test="id!= null">
+                  and id=#{id}
+            </if>
+		    <if test="versionType!= null">
+                  and version_type=#{versionType}
+            </if>
+		    <if test="versionCode!= null">
+                  and version_code=#{versionCode}
+            </if>
+		    <if test="versionContent!= null">
+                  and version_content=#{versionContent}
+            </if>
+		    <if test="versionUrl!= null">
+                  and version_url=#{versionUrl}
+            </if>
+		    <if test="versionDate!= null">
+                  and version_date=#{versionDate}
+            </if>
+  		</where>
+		  		ORDER BY id DESC
+	</select>
+	
+		<insert id="insertNotNull" parameterType="com.chetong.ctwechat.entity.mapping.VersionInfo" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO version_info   
+			(
+				<trim suffix="" suffixOverrides=",">
+					<if test="id!= null">
+		                   id,
+		            </if>
+					<if test="versionType!= null">
+		                   version_type,
+		            </if>
+					<if test="versionCode!= null">
+		                   version_code,
+		            </if>
+					<if test="versionContent!= null">
+		                   version_content,
+		            </if>
+					<if test="versionUrl!= null">
+		                   version_url,
+		            </if>
+					<if test="versionDate!= null">
+		                   version_date,
+		            </if>
+	            </trim>
+			)
+			VALUES
+	   		(
+	   			<trim suffix="" suffixOverrides=",">
+		   			<if test="id!= null">
+		   			#{id},
+		   			</if>
+		   			<if test="versionType!= null">
+		   			#{versionType},
+		   			</if>
+		   			<if test="versionCode!= null">
+		   			#{versionCode},
+		   			</if>
+		   			<if test="versionContent!= null">
+		   			#{versionContent},
+		   			</if>
+		   			<if test="versionUrl!= null">
+		   			#{versionUrl},
+		   			</if>
+		   			<if test="versionDate!= null">
+		   			#{versionDate},
+		   			</if>
+	   			</trim>
+			)
+		</insert>
+
+	<select id="queryByKey" resultType="com.chetong.ctwechat.entity.mapping.VersionInfo">
+		SELECT 
+			id as id, 
+			version_type as versionType, 
+			version_code as versionCode, 
+			version_content as versionContent, 
+			version_url as versionUrl, 
+			version_date as versionDate 
+		FROM
+			version_info
+	    <where>		   
+		    	 and id = #{id}
+		</where>
+	</select>
+	
+	<delete id="deleteByKey">
+		DELETE FROM 
+			version_info 
+		<where>		   
+		    	 and id = #{id}
+		</where>
+	</delete>
+	
+	<update id="updateByKeyNotNull">
+		UPDATE version_info 
+		  <trim prefix="SET" suffixOverrides=",">  
+					<if test="versionType!= null">
+		   			version_type = #{versionType},
+		   			</if>  
+					<if test="versionCode!= null">
+		   			version_code = #{versionCode},
+		   			</if>  
+					<if test="versionContent!= null">
+		   			version_content = #{versionContent},
+		   			</if>  
+					<if test="versionUrl!= null">
+		   			version_url = #{versionUrl},
+		   			</if>  
+					<if test="versionDate!= null">
+		   			version_date = #{versionDate},
+		   			</if>  
+		  </trim>
+		  <where>	   
+				    and id = #{id}
+		 </where>
+	</update>
+</mapper>
